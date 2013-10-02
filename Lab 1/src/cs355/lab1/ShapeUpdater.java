@@ -143,4 +143,11 @@ public class ShapeUpdater {
 		triangle.setY(triangle.getY() + centerY);
 
 	}
+
+	public void rotateShape(Shape shape, double x2, double y2) {
+		System.out.println(y2 - shape.getY());
+		System.out.println(x2 - shape.getX());
+		shape.setRotation(-Math.atan2(-(x2 - shape.getX()),
+				-(y2 - shape.getY())));
+	}
 }

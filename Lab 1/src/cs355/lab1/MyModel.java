@@ -1,6 +1,7 @@
 package cs355.lab1;
 
 import java.awt.geom.Point2D;
+import java.awt.geom.Point2D.Double;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,6 +23,55 @@ public class MyModel {
 
 	public void removeShape(Shape shape) {
 		shapes.remove(shape);
+	}
+
+	public Point2D testRotationHandle(double x, double y, Shape selected) {
+
+		x -= selected.getX();
+		y -= selected.getY();
+
+		if (selected instanceof Square) {
+
+			Square square = (Square) selected;
+
+			if ((0) * (0) + (y + square.getSize() * 3 / 4)
+					* (y + square.getSize() * 3 / 4) <= (3) * (3)) {
+				return new Point2D.Double(selected.getX(), selected.getY()
+						- square.getSize() * 3 / 4);
+			}
+		} else if (selected instanceof Rectangle) {
+
+			Rectangle rectangle = (Rectangle) selected;
+
+			if ((0) * (0) + (y + rectangle.getHeight() * 3 / 4)
+					* (y + rectangle.getHeight() * 3 / 4) <= (3) * (3)) {
+				return new Point2D.Double(selected.getX(), selected.getY()
+						- rectangle.getHeight() * 3 / 4);
+			}
+		} else if (selected instanceof Ellipse) {
+
+			Ellipse ellipse = (Ellipse) selected;
+
+			if ((0) * (0) + (y + ellipse.getHeight() * 3 / 4)
+					* (y + ellipse.getHeight() * 3 / 4) <= (3) * (3)) {
+				return new Point2D.Double(selected.getX(), selected.getY()
+						- ellipse.getHeight() * 3 / 4);
+			}
+		} else if (selected instanceof Triangle) {
+
+			Triangle triangle = (Triangle) selected;
+
+			if ((x - (triangle.getX1() + triangle.getX2()))
+					* (x - (triangle.getX1() + triangle.getX2()))
+					+ (y - (triangle.getY1() + triangle.getY2()))
+					* (y - (triangle.getY1() + triangle.getY2())) <= (3) * (3)) {
+				return new Point2D.Double(selected.getX() + triangle.getX1()
+						+ triangle.getX2(), selected.getY() + triangle.getY1()
+						+ triangle.getY2());
+			}
+		}
+
+		return null;
 	}
 
 	public Point2D testHandles(double x, double y, Shape selected) {

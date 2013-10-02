@@ -8,7 +8,7 @@ public abstract class Shape {
 	private double x;
 	private double y;
 	private double rotation;
-	
+
 	protected Shape(Color color, double x, double y) {
 		this.color = color;
 		this.x = x;

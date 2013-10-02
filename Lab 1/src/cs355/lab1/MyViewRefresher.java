@@ -111,6 +111,10 @@ public class MyViewRefresher implements ViewRefresher {
 		g2d.translate((int) controller.getSelected().getX(), (int) controller
 				.getSelected().getY());
 
+		if (controller.getSelected().getRotation() != 0) {
+			g2d.rotate(controller.getSelected().getRotation());
+		}
+
 		if (controller.getSelected() instanceof Square) {
 
 			Square square = (Square) controller.getSelected();
@@ -168,6 +172,18 @@ public class MyViewRefresher implements ViewRefresher {
 			g2d.drawOval((int) Math.round(square.getSize() / 2) - 3,
 					(int) Math.round(square.getSize() / 2 - 3), 6, 6);
 
+			// Rotation
+
+			g2d.setColor(Color.GREEN);
+
+			g2d.fillOval(-3, (int) Math.round(-square.getSize() * 3 / 4 - 3),
+					6, 6);
+
+			g2d.setColor(Color.BLACK);
+
+			g2d.drawOval(-3, (int) Math.round(-square.getSize() * 3 / 4 - 3),
+					6, 6);
+
 		} else if (controller.getSelected() instanceof Rectangle) {
 
 			Rectangle rectangle = (Rectangle) controller.getSelected();
@@ -224,6 +240,18 @@ public class MyViewRefresher implements ViewRefresher {
 
 			g2d.drawOval((int) Math.round(rectangle.getWidth() / 2) - 3,
 					(int) Math.round(rectangle.getHeight() / 2 - 3), 6, 6);
+
+			// Rotation
+
+			g2d.setColor(Color.GREEN);
+
+			g2d.fillOval(-3,
+					(int) Math.round(-rectangle.getHeight() * 3 / 4 - 3), 6, 6);
+
+			g2d.setColor(Color.BLACK);
+
+			g2d.drawOval(-3,
+					(int) Math.round(-rectangle.getHeight() * 3 / 4 - 3), 6, 6);
 
 		} else if (controller.getSelected() instanceof Circle) {
 
@@ -339,6 +367,18 @@ public class MyViewRefresher implements ViewRefresher {
 			g2d.drawOval((int) Math.round(ellipse.getWidth() / 2) - 3,
 					(int) Math.round(ellipse.getHeight() / 2 - 3), 6, 6);
 
+			// Rotation
+
+			g2d.setColor(Color.GREEN);
+
+			g2d.fillOval(-3,
+					(int) Math.round(-ellipse.getHeight() * 3 / 4 - 3), 6, 6);
+
+			g2d.setColor(Color.BLACK);
+
+			g2d.drawOval(-3,
+					(int) Math.round(-ellipse.getHeight() * 3 / 4 - 3), 6, 6);
+
 		} else if (controller.getSelected() instanceof Triangle) {
 
 			Triangle triangle = (Triangle) controller.getSelected();
@@ -386,6 +426,22 @@ public class MyViewRefresher implements ViewRefresher {
 
 			g2d.drawOval((int) Math.round(triangle.getX3()) - 3,
 					(int) Math.round(triangle.getY3()) - 3, 6, 6);
+
+			// Rotation
+
+			g2d.setColor(Color.GREEN);
+
+			g2d.fillOval(
+					(int) Math.round(triangle.getX1() + triangle.getX2() - 3),
+					(int) Math.round(triangle.getY1() + triangle.getY2() - 3),
+					6, 6);
+
+			g2d.setColor(Color.BLACK);
+
+			g2d.drawOval(
+					(int) Math.round(triangle.getX1() + triangle.getX2() - 3),
+					(int) Math.round(triangle.getY1() + triangle.getY2() - 3),
+					6, 6);
 
 		}
 

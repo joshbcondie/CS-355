@@ -145,7 +145,17 @@ public class MyController extends MouseAdapter implements CS355Controller {
 			y1 = e.getY();
 			if (shape != null) {
 
-				Point2D fixedPoint = model.testHandles(x1, y1, shape);
+				Point2D fixedPoint = model.testRotationHandle(x1, y1, shape);
+
+				if (fixedPoint != null) {
+					System.out.println("ROTATING");
+					transform = Transform.ROTATE;
+					updater.setX1(fixedPoint.getX());
+					updater.setY1(fixedPoint.getY());
+					break;
+				}
+
+				fixedPoint = model.testHandles(x1, y1, shape);
 
 				if (fixedPoint != null) {
 					transform = Transform.RESHAPE;
@@ -228,6 +238,7 @@ public class MyController extends MouseAdapter implements CS355Controller {
 
 					break;
 				case ROTATE:
+					updater.rotateShape(shape, e.getX(), e.getY());
 					break;
 				default:
 					break;
