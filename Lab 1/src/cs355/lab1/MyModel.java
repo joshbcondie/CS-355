@@ -69,15 +69,6 @@ public class MyModel {
 
 			Triangle triangle = (Triangle) selected;
 
-			System.out
-					.println((x)
-							* (x)
-							+ (y - Math.min(triangle.getY1(), Math.min(
-									triangle.getY2(), triangle.getY3())) * 3 / 2)
-							* (y - Math.min(triangle.getY1(), Math.min(
-									triangle.getY2(), triangle.getY3()))) * 3
-							/ 2);
-
 			if ((x)
 					* (x)
 					+ (y - Math.min(triangle.getY1(),
@@ -262,6 +253,8 @@ public class MyModel {
 
 		for (int i = shapes.size() - 1; i >= 0; i--) {
 
+			System.out.println(x + " " + y);
+
 			if (shapes.get(i) instanceof Line) {
 
 				Line line = (Line) shapes.get(i);
@@ -367,6 +360,13 @@ public class MyModel {
 					return triangle;
 				}
 			}
+
+			AffineTransform inverseTransform = new AffineTransform();
+			inverseTransform.rotate(shapes.get(i).getRotation());
+			Point2D point2 = new Point2D.Double();
+			inverseTransform.transform(new Point2D.Double(x, y), point2);
+			x = point2.getX();
+			y = point2.getY();
 
 			x += shapes.get(i).getX();
 			y += shapes.get(i).getY();
