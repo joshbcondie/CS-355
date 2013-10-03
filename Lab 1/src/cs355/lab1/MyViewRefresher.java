@@ -77,6 +77,9 @@ public class MyViewRefresher implements ViewRefresher {
 
 			Line line = (Line) controller.getSelected();
 
+			g2d.setColor(line.getColor());
+			drawLine(g2d, line);
+
 			// Point 1
 
 			g2d.setColor(Color.WHITE);
@@ -431,16 +434,14 @@ public class MyViewRefresher implements ViewRefresher {
 
 			g2d.setColor(Color.GREEN);
 
-			g2d.fillOval(
-					(int) Math.round(triangle.getX1() + triangle.getX2() - 3),
-					(int) Math.round(triangle.getY1() + triangle.getY2() - 3),
+			g2d.fillOval(-3, (int) Math.round(Math.min(triangle.getY1(),
+					Math.min(triangle.getY2(), triangle.getY3())) * 3 / 2 - 3),
 					6, 6);
 
 			g2d.setColor(Color.BLACK);
 
-			g2d.drawOval(
-					(int) Math.round(triangle.getX1() + triangle.getX2() - 3),
-					(int) Math.round(triangle.getY1() + triangle.getY2() - 3),
+			g2d.drawOval(-3, (int) Math.round(Math.min(triangle.getY1(),
+					Math.min(triangle.getY2(), triangle.getY3())) * 3 / 2 - 3),
 					6, 6);
 
 		}

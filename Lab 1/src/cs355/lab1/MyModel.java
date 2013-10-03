@@ -1,5 +1,6 @@
 package cs355.lab1;
 
+import java.awt.geom.AffineTransform;
 import java.awt.geom.Point2D;
 import java.awt.geom.Point2D.Double;
 import java.util.ArrayList;
@@ -30,11 +31,18 @@ public class MyModel {
 		x -= selected.getX();
 		y -= selected.getY();
 
+		AffineTransform transform = new AffineTransform();
+		transform.rotate(-selected.getRotation());
+		Point2D point = new Point2D.Double();
+		transform.transform(new Point2D.Double(x, y), point);
+		x = point.getX();
+		y = point.getY();
+
 		if (selected instanceof Square) {
 
 			Square square = (Square) selected;
 
-			if ((0) * (0) + (y + square.getSize() * 3 / 4)
+			if ((x) * (x) + (y + square.getSize() * 3 / 4)
 					* (y + square.getSize() * 3 / 4) <= (3) * (3)) {
 				return new Point2D.Double(selected.getX(), selected.getY()
 						- square.getSize() * 3 / 4);
@@ -43,7 +51,7 @@ public class MyModel {
 
 			Rectangle rectangle = (Rectangle) selected;
 
-			if ((0) * (0) + (y + rectangle.getHeight() * 3 / 4)
+			if ((x) * (x) + (y + rectangle.getHeight() * 3 / 4)
 					* (y + rectangle.getHeight() * 3 / 4) <= (3) * (3)) {
 				return new Point2D.Double(selected.getX(), selected.getY()
 						- rectangle.getHeight() * 3 / 4);
@@ -52,7 +60,7 @@ public class MyModel {
 
 			Ellipse ellipse = (Ellipse) selected;
 
-			if ((0) * (0) + (y + ellipse.getHeight() * 3 / 4)
+			if ((x) * (x) + (y + ellipse.getHeight() * 3 / 4)
 					* (y + ellipse.getHeight() * 3 / 4) <= (3) * (3)) {
 				return new Point2D.Double(selected.getX(), selected.getY()
 						- ellipse.getHeight() * 3 / 4);
@@ -61,13 +69,29 @@ public class MyModel {
 
 			Triangle triangle = (Triangle) selected;
 
-			if ((x - (triangle.getX1() + triangle.getX2()))
-					* (x - (triangle.getX1() + triangle.getX2()))
-					+ (y - (triangle.getY1() + triangle.getY2()))
-					* (y - (triangle.getY1() + triangle.getY2())) <= (3) * (3)) {
-				return new Point2D.Double(selected.getX() + triangle.getX1()
-						+ triangle.getX2(), selected.getY() + triangle.getY1()
-						+ triangle.getY2());
+			System.out
+					.println((x)
+							* (x)
+							+ (y - Math.min(triangle.getY1(), Math.min(
+									triangle.getY2(), triangle.getY3())) * 3 / 2)
+							* (y - Math.min(triangle.getY1(), Math.min(
+									triangle.getY2(), triangle.getY3()))) * 3
+							/ 2);
+
+			if ((x)
+					* (x)
+					+ (y - Math.min(triangle.getY1(),
+							Math.min(triangle.getY2(), triangle.getY3())) * 3 / 2)
+					* (y - Math.min(triangle.getY1(),
+							Math.min(triangle.getY2(), triangle.getY3())) * 3 / 2) <= (3) * (3)) {
+				return new Point2D.Double(selected.getX()
+						+ Math.min(triangle.getY1(),
+								Math.min(triangle.getY2(), triangle.getY3())),
+						selected.getY()
+								+ Math.min(
+										triangle.getY1(),
+										Math.min(triangle.getY2(),
+												triangle.getY3())));
 			}
 		}
 
@@ -99,6 +123,13 @@ public class MyModel {
 
 		x -= selected.getX();
 		y -= selected.getY();
+
+		AffineTransform transform = new AffineTransform();
+		transform.rotate(-selected.getRotation());
+		Point2D point = new Point2D.Double();
+		transform.transform(new Point2D.Double(x, y), point);
+		x = point.getX();
+		y = point.getY();
 
 		if (selected instanceof Square) {
 
@@ -231,80 +262,7 @@ public class MyModel {
 
 		for (int i = shapes.size() - 1; i >= 0; i--) {
 
-			if (shapes.get(i) instanceof Square) {
-
-				Square square = (Square) shapes.get(i);
-
-				if (Math.abs(x - square.getX()) <= square.getSize() / 2
-						&& Math.abs(y - square.getY()) <= square.getSize() / 2) {
-					return square;
-				}
-			} else if (shapes.get(i) instanceof Rectangle) {
-
-				Rectangle rectangle = (Rectangle) shapes.get(i);
-
-				if (Math.abs(x - rectangle.getX()) <= rectangle.getWidth() / 2
-						&& Math.abs(y - rectangle.getY()) <= rectangle
-								.getHeight() / 2) {
-					return rectangle;
-
-				}
-
-			} else if (shapes.get(i) instanceof Circle) {
-
-				Circle circle = (Circle) shapes.get(i);
-
-				if ((x - circle.getX()) * (x - circle.getX())
-						+ (y - circle.getY()) * (y - circle.getY()) <= circle
-						.getRadius() * circle.getRadius()) {
-					return circle;
-				}
-
-			} else if (shapes.get(i) instanceof Ellipse) {
-
-				Ellipse ellipse = (Ellipse) shapes.get(i);
-
-				if ((x - ellipse.getX())
-						* (x - ellipse.getX())
-						/ ((ellipse.getWidth() / 2) * (ellipse.getWidth() / 2))
-						+ (y - ellipse.getY())
-						* (y - ellipse.getY())
-						/ ((ellipse.getHeight() / 2) * (ellipse.getHeight() / 2)) <= 1) {
-					return ellipse;
-				}
-
-			} else if (shapes.get(i) instanceof Triangle) {
-
-				Triangle triangle = (Triangle) shapes.get(i);
-				x -= triangle.getX();
-				y -= triangle.getY();
-
-				double normalX = -(triangle.getY2() - triangle.getY1());
-				double normalY = triangle.getX2() - triangle.getX1();
-				double dotProduct1 = normalX * (x - triangle.getX1()) + normalY
-						* (y - triangle.getY1());
-
-				normalX = -(triangle.getY3() - triangle.getY2());
-				normalY = triangle.getX3() - triangle.getX2();
-				double dotProduct2 = normalX * (x - triangle.getX2()) + normalY
-						* (y - triangle.getY2());
-
-				normalX = -(triangle.getY1() - triangle.getY3());
-				normalY = triangle.getX1() - triangle.getX3();
-				double dotProduct3 = normalX * (x - triangle.getX3()) + normalY
-						* (y - triangle.getY3());
-
-				if (dotProduct1 >= 0 && dotProduct2 >= 0 && dotProduct3 >= 0) {
-					return triangle;
-				} else if (dotProduct1 <= 0 && dotProduct2 <= 0
-						&& dotProduct3 <= 0) {
-					return triangle;
-				}
-
-				x += triangle.getX();
-				y += triangle.getY();
-
-			} else if (shapes.get(i) instanceof Line) {
+			if (shapes.get(i) instanceof Line) {
 
 				Line line = (Line) shapes.get(i);
 
@@ -329,7 +287,89 @@ public class MyModel {
 						return line;
 					}
 				}
+
+				continue;
 			}
+
+			x -= shapes.get(i).getX();
+			y -= shapes.get(i).getY();
+
+			AffineTransform transform = new AffineTransform();
+			transform.rotate(-shapes.get(i).getRotation());
+			Point2D point = new Point2D.Double();
+			transform.transform(new Point2D.Double(x, y), point);
+			x = point.getX();
+			y = point.getY();
+
+			if (shapes.get(i) instanceof Square) {
+
+				Square square = (Square) shapes.get(i);
+
+				if (Math.abs(x) <= square.getSize() / 2
+						&& Math.abs(y) <= square.getSize() / 2) {
+					return square;
+				}
+			} else if (shapes.get(i) instanceof Rectangle) {
+
+				Rectangle rectangle = (Rectangle) shapes.get(i);
+
+				if (Math.abs(x) <= rectangle.getWidth() / 2
+						&& Math.abs(y) <= rectangle.getHeight() / 2) {
+					return rectangle;
+
+				}
+
+			} else if (shapes.get(i) instanceof Circle) {
+
+				Circle circle = (Circle) shapes.get(i);
+
+				if ((x) * (x) + (y) * (y) <= circle.getRadius()
+						* circle.getRadius()) {
+					return circle;
+				}
+
+			} else if (shapes.get(i) instanceof Ellipse) {
+
+				Ellipse ellipse = (Ellipse) shapes.get(i);
+
+				if ((x)
+						* (x)
+						/ ((ellipse.getWidth() / 2) * (ellipse.getWidth() / 2))
+						+ (y)
+						* (y)
+						/ ((ellipse.getHeight() / 2) * (ellipse.getHeight() / 2)) <= 1) {
+					return ellipse;
+				}
+
+			} else if (shapes.get(i) instanceof Triangle) {
+
+				Triangle triangle = (Triangle) shapes.get(i);
+
+				double normalX = -(triangle.getY2() - triangle.getY1());
+				double normalY = triangle.getX2() - triangle.getX1();
+				double dotProduct1 = normalX * (x - triangle.getX1()) + normalY
+						* (y - triangle.getY1());
+
+				normalX = -(triangle.getY3() - triangle.getY2());
+				normalY = triangle.getX3() - triangle.getX2();
+				double dotProduct2 = normalX * (x - triangle.getX2()) + normalY
+						* (y - triangle.getY2());
+
+				normalX = -(triangle.getY1() - triangle.getY3());
+				normalY = triangle.getX1() - triangle.getX3();
+				double dotProduct3 = normalX * (x - triangle.getX3()) + normalY
+						* (y - triangle.getY3());
+
+				if (dotProduct1 >= 0 && dotProduct2 >= 0 && dotProduct3 >= 0) {
+					return triangle;
+				} else if (dotProduct1 <= 0 && dotProduct2 <= 0
+						&& dotProduct3 <= 0) {
+					return triangle;
+				}
+			}
+
+			x += shapes.get(i).getX();
+			y += shapes.get(i).getY();
 		}
 
 		return null;
