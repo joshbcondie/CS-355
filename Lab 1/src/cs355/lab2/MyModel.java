@@ -1,4 +1,4 @@
-package cs355.lab1;
+package cs355.lab2;
 
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Point2D;
@@ -210,26 +210,30 @@ public class MyModel {
 			if ((x + ellipse.getWidth() / 2) * (x + ellipse.getWidth() / 2)
 					+ (y + ellipse.getHeight() / 2)
 					* (y + ellipse.getHeight() / 2) <= (3) * (3)) {
-				return new Point2D.Double(selected.getX() + ellipse.getWidth()
-						/ 2, selected.getY() + ellipse.getHeight() / 2);
+				Point2D world = Transformation.objectToWorld(ellipse,
+						ellipse.getWidth() / 2, ellipse.getHeight() / 2);
+				return new Point2D.Double(world.getX(), world.getY());
 			} else if ((x - ellipse.getWidth() / 2)
 					* (x - ellipse.getWidth() / 2)
 					+ (y + ellipse.getHeight() / 2)
 					* (y + ellipse.getHeight() / 2) <= (3) * (3)) {
-				return new Point2D.Double(selected.getX() - ellipse.getWidth()
-						/ 2, selected.getY() + ellipse.getHeight() / 2);
+				Point2D world = Transformation.objectToWorld(ellipse,
+						-ellipse.getWidth() / 2, ellipse.getHeight() / 2);
+				return new Point2D.Double(world.getX(), world.getY());
 			} else if ((x + ellipse.getWidth() / 2)
 					* (x + ellipse.getWidth() / 2)
 					+ (y - ellipse.getHeight() / 2)
 					* (y - ellipse.getHeight() / 2) <= (3) * (3)) {
-				return new Point2D.Double(selected.getX() + ellipse.getWidth()
-						/ 2, selected.getY() - ellipse.getHeight() / 2);
+				Point2D world = Transformation.objectToWorld(ellipse,
+						ellipse.getWidth() / 2, -ellipse.getHeight() / 2);
+				return new Point2D.Double(world.getX(), world.getY());
 			} else if ((x - ellipse.getWidth() / 2)
 					* (x - ellipse.getWidth() / 2)
 					+ (y - ellipse.getHeight() / 2)
 					* (y - ellipse.getHeight() / 2) <= (3) * (3)) {
-				return new Point2D.Double(selected.getX() - ellipse.getWidth()
-						/ 2, selected.getY() - ellipse.getHeight() / 2);
+				Point2D world = Transformation.objectToWorld(ellipse,
+						-ellipse.getWidth() / 2, -ellipse.getHeight() / 2);
+				return new Point2D.Double(world.getX(), world.getY());
 			}
 		} else if (selected instanceof Triangle) {
 

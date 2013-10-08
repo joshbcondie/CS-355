@@ -1,14 +1,13 @@
-package cs355.lab1;
+package cs355.lab2;
 
 import java.awt.Color;
 
-public class Rectangle extends Shape {
+public class Ellipse extends Shape {
 
 	private double width;
 	private double height;
 
-	public Rectangle(Color color, double x, double y, double width,
-			double height) {
+	public Ellipse(Color color, double x, double y, double width, double height) {
 		super(color, x, y);
 		this.width = width;
 		this.height = height;

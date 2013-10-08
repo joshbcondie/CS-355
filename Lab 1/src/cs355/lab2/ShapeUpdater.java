@@ -1,4 +1,4 @@
-package cs355.lab1;
+package cs355.lab2;
 
 import java.awt.geom.AffineTransform;
 import java.awt.geom.NoninvertibleTransformException;
@@ -115,20 +115,27 @@ public class ShapeUpdater {
 
 		Ellipse ellipse = (Ellipse) shape;
 
-		if (x2 >= x1) {
-			ellipse.setWidth(x2 - x1);
-			ellipse.setX(x1 + ellipse.getWidth() / 2);
+		Point2D objectCoords1 = Transformation.worldToObject(shape, x1, y1);
+
+		Point2D objectCoords2 = Transformation.worldToObject(shape, x2, y2);
+
+		if (objectCoords2.getX() >= objectCoords1.getX()) {
+			ellipse.setWidth(objectCoords2.getX() - objectCoords1.getX());
 		} else {
-			ellipse.setWidth(x1 - x2);
-			ellipse.setX(x2 + ellipse.getWidth() / 2);
+			ellipse.setWidth(objectCoords1.getX() - objectCoords2.getX());
 		}
-		if (y2 >= y1) {
-			ellipse.setHeight(y2 - y1);
-			ellipse.setY(y1 + ellipse.getHeight() / 2);
+		if (objectCoords2.getY() >= objectCoords1.getY()) {
+			ellipse.setHeight(objectCoords2.getY() - objectCoords1.getY());
 		} else {
-			ellipse.setHeight(y1 - y2);
-			ellipse.setY(y2 + ellipse.getHeight() / 2);
+			ellipse.setHeight(objectCoords1.getY() - objectCoords2.getY());
 		}
+
+		Point2D worldCoordCenter = Transformation.objectToWorld(shape,
+				(objectCoords1.getX() + objectCoords2.getX()) / 2,
+				(objectCoords1.getY() + objectCoords2.getY()) / 2);
+
+		ellipse.setX(worldCoordCenter.getX());
+		ellipse.setY(worldCoordCenter.getY());
 	}
 
 	public void updateLine(Shape shape, double x2, double y2) {
