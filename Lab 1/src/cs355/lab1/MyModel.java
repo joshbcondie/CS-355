@@ -6,6 +6,8 @@ import java.awt.geom.Point2D.Double;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.sun.org.glassfish.external.statistics.annotations.Reset;
+
 public class MyModel {
 
 	private List<Shape> shapes;
@@ -150,30 +152,26 @@ public class MyModel {
 			if ((x + rectangle.getWidth() / 2) * (x + rectangle.getWidth() / 2)
 					+ (y + rectangle.getHeight() / 2)
 					* (y + rectangle.getHeight() / 2) <= (3) * (3)) {
-				return new Point2D.Double(selected.getX()
-						+ rectangle.getWidth() / 2, selected.getY()
-						+ rectangle.getHeight() / 2);
+				return new Point2D.Double(rectangle.getWidth() / 2,
+						rectangle.getHeight() / 2);
 			} else if ((x - rectangle.getWidth() / 2)
 					* (x - rectangle.getWidth() / 2)
 					+ (y + rectangle.getHeight() / 2)
 					* (y + rectangle.getHeight() / 2) <= (3) * (3)) {
-				return new Point2D.Double(selected.getX()
-						- rectangle.getWidth() / 2, selected.getY()
-						+ rectangle.getHeight() / 2);
+				return new Point2D.Double(-rectangle.getWidth() / 2,
+						rectangle.getHeight() / 2);
 			} else if ((x + rectangle.getWidth() / 2)
 					* (x + rectangle.getWidth() / 2)
 					+ (y - rectangle.getHeight() / 2)
 					* (y - rectangle.getHeight() / 2) <= (3) * (3)) {
-				return new Point2D.Double(selected.getX()
-						+ rectangle.getWidth() / 2, selected.getY()
-						- rectangle.getHeight() / 2);
+				return new Point2D.Double(rectangle.getWidth() / 2,
+						-rectangle.getHeight() / 2);
 			} else if ((x - rectangle.getWidth() / 2)
 					* (x - rectangle.getWidth() / 2)
 					+ (y - rectangle.getHeight() / 2)
 					* (y - rectangle.getHeight() / 2) <= (3) * (3)) {
-				return new Point2D.Double(selected.getX()
-						- rectangle.getWidth() / 2, selected.getY()
-						- rectangle.getHeight() / 2);
+				return new Point2D.Double(-rectangle.getWidth() / 2,
+						-rectangle.getHeight() / 2);
 			}
 		} else if (selected instanceof Circle) {
 
@@ -231,18 +229,15 @@ public class MyModel {
 			if ((x - triangle.getX1()) * (x - triangle.getX1())
 					+ (y - triangle.getY1()) * (y - triangle.getY1()) <= (3) * (3)) {
 				triangle.setCornerSelected(0);
-				return new Point2D.Double(selected.getX() + triangle.getX1(),
-						selected.getY() + triangle.getY1());
+				return new Point2D.Double(triangle.getX1(), triangle.getY1());
 			} else if ((x - triangle.getX2()) * (x - triangle.getX2())
 					+ (y - triangle.getY2()) * (y - triangle.getY2()) <= (3) * (3)) {
 				triangle.setCornerSelected(1);
-				return new Point2D.Double(selected.getX() + triangle.getX2(),
-						selected.getY() + triangle.getY2());
+				return new Point2D.Double(triangle.getX2(), triangle.getY2());
 			} else if ((x - triangle.getX3()) * (x - triangle.getX3())
 					+ (y - triangle.getY3()) * (y - triangle.getY3()) <= (3) * (3)) {
 				triangle.setCornerSelected(2);
-				return new Point2D.Double(selected.getX() + triangle.getX3(),
-						selected.getY() + triangle.getY3());
+				return new Point2D.Double(triangle.getX3(), triangle.getY3());
 			}
 		}
 
@@ -252,8 +247,6 @@ public class MyModel {
 	public Shape getSelectedShape(double x, double y, int tolerance) {
 
 		for (int i = shapes.size() - 1; i >= 0; i--) {
-
-			System.out.println(x + " " + y);
 
 			if (shapes.get(i) instanceof Line) {
 

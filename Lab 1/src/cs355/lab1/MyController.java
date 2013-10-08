@@ -185,7 +185,8 @@ public class MyController extends MouseAdapter implements CS355Controller {
 			break;
 
 		case RECTANGLE:
-			updater.updateRectangle(shape, e.getX(), e.getY());
+			updater.updateRectangle(shape, e.getX() - shape.getX(), e.getY()
+					- shape.getY());
 			break;
 
 		case CIRCLE:
@@ -224,7 +225,8 @@ public class MyController extends MouseAdapter implements CS355Controller {
 					if (shape instanceof Square) {
 						updater.updateSquare(shape, e.getX(), e.getY());
 					} else if (shape instanceof Rectangle) {
-						updater.updateRectangle(shape, e.getX(), e.getY());
+						updater.updateRectangle(shape, e.getX() - shape.getX(),
+								e.getY() - shape.getY());
 					} else if (shape instanceof Circle) {
 						updater.updateCircle(shape, e.getX(), e.getY());
 					} else if (shape instanceof Ellipse) {
@@ -232,7 +234,8 @@ public class MyController extends MouseAdapter implements CS355Controller {
 					} else if (shape instanceof Line) {
 						updater.updateLine(shape, e.getX(), e.getY());
 					} else if (shape instanceof Triangle) {
-						updater.updateTriangle(shape, e.getX(), e.getY());
+						updater.updateTriangle(shape, e.getX() - shape.getX(),
+								e.getY() - shape.getY());
 					}
 
 					break;

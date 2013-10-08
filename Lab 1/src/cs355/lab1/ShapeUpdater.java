@@ -1,5 +1,9 @@
 package cs355.lab1;
 
+import java.awt.geom.AffineTransform;
+import java.awt.geom.NoninvertibleTransformException;
+import java.awt.geom.Point2D;
+
 public class ShapeUpdater {
 
 	private double x1;
@@ -40,19 +44,26 @@ public class ShapeUpdater {
 
 		Rectangle rectangle = (Rectangle) shape;
 
+		AffineTransform transform = new AffineTransform();
+		transform.rotate(-rectangle.getRotation());
+		Point2D point = new Point2D.Double();
+		transform.transform(new Point2D.Double(x2, y2), point);
+		x2 = point.getX();
+		y2 = point.getY();
+
 		if (x2 >= x1) {
 			rectangle.setWidth(x2 - x1);
-			rectangle.setX(x1 + rectangle.getWidth() / 2);
+			rectangle.setX(rectangle.getX() + x1 + rectangle.getWidth() / 2);
 		} else {
 			rectangle.setWidth(x1 - x2);
-			rectangle.setX(x2 + rectangle.getWidth() / 2);
+			rectangle.setX(rectangle.getX() + x2 + rectangle.getWidth() / 2);
 		}
 		if (y2 >= y1) {
 			rectangle.setHeight(y2 - y1);
-			rectangle.setY(y1 + rectangle.getHeight() / 2);
+			rectangle.setY(rectangle.getY() + y1 + rectangle.getHeight() / 2);
 		} else {
 			rectangle.setHeight(y1 - y2);
-			rectangle.setY(y2 + rectangle.getHeight() / 2);
+			rectangle.setY(rectangle.getY() + y2 + rectangle.getHeight() / 2);
 		}
 	}
 
@@ -106,31 +117,12 @@ public class ShapeUpdater {
 		line.setY2(y2);
 	}
 
-	public void updateTriangle(Shape shape, double x2, double y2) {
+	public void resetTriangleCenter(Triangle triangle) {
 
-		Triangle triangle = (Triangle) shape;
-
-		switch (triangle.getCornerSelected()) {
-
-		case 0:
-			triangle.setX1(x2 - triangle.getX());
-			triangle.setY1(y2 - triangle.getY());
-			break;
-
-		case 1:
-			triangle.setX2(x2 - triangle.getX());
-			triangle.setY2(y2 - triangle.getY());
-			break;
-		case 2:
-			triangle.setX3(x2 - triangle.getX());
-			triangle.setY3(y2 - triangle.getY());
-			break;
-		}
-
-		int centerX = (int) Math.round(triangle.getX1() + triangle.getX2()
-				+ triangle.getX3()) / 3;
-		int centerY = (int) Math.round(triangle.getY1() + triangle.getY2()
-				+ triangle.getY3()) / 3;
+		double centerX = (triangle.getX1() + triangle.getX2() + triangle
+				.getX3()) / 3;
+		double centerY = (triangle.getY1() + triangle.getY2() + triangle
+				.getY3()) / 3;
 
 		triangle.setX1(triangle.getX1() - centerX);
 		triangle.setY1(triangle.getY1() - centerY);
@@ -139,9 +131,46 @@ public class ShapeUpdater {
 		triangle.setX3(triangle.getX3() - centerX);
 		triangle.setY3(triangle.getY3() - centerY);
 
+		AffineTransform transform = new AffineTransform();
+		transform.rotate(triangle.getRotation());
+		Point2D point = new Point2D.Double();
+		transform.transform(new Point2D.Double(centerX, centerY), point);
+		centerX = point.getX();
+		centerY = point.getY();
+
 		triangle.setX(triangle.getX() + centerX);
 		triangle.setY(triangle.getY() + centerY);
+	}
 
+	public void updateTriangle(Shape shape, double x2, double y2) {
+
+		Triangle triangle = (Triangle) shape;
+
+		AffineTransform transform = new AffineTransform();
+		transform.rotate(-triangle.getRotation());
+		Point2D point = new Point2D.Double();
+		transform.transform(new Point2D.Double(x2, y2), point);
+		x2 = point.getX();
+		y2 = point.getY();
+
+		switch (triangle.getCornerSelected()) {
+
+		case 0:
+			triangle.setX1(x2);
+			triangle.setY1(y2);
+			break;
+
+		case 1:
+			triangle.setX2(x2);
+			triangle.setY2(y2);
+			break;
+		case 2:
+			triangle.setX3(x2);
+			triangle.setY3(y2);
+			break;
+		}
+
+		resetTriangleCenter(triangle);
 	}
 
 	public void rotateShape(Shape shape, double x2, double y2) {
