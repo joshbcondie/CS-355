@@ -152,30 +152,31 @@ public class MyModel {
 			if ((x + rectangle.getWidth() / 2) * (x + rectangle.getWidth() / 2)
 					+ (y + rectangle.getHeight() / 2)
 					* (y + rectangle.getHeight() / 2) <= (3) * (3)) {
-				return new Point2D.Double(selected.getX()
-						+ rectangle.getWidth() / 2, selected.getY()
-						+ rectangle.getHeight() / 2);
+
+				Point2D world = Transformation.objectToWorld(rectangle,
+						rectangle.getWidth() / 2, rectangle.getHeight() / 2);
+				return new Point2D.Double(world.getX(), world.getY());
 			} else if ((x - rectangle.getWidth() / 2)
 					* (x - rectangle.getWidth() / 2)
 					+ (y + rectangle.getHeight() / 2)
 					* (y + rectangle.getHeight() / 2) <= (3) * (3)) {
-				return new Point2D.Double(selected.getX()
-						- rectangle.getWidth() / 2, selected.getY()
-						+ rectangle.getHeight() / 2);
+				Point2D world = Transformation.objectToWorld(rectangle,
+						-rectangle.getWidth() / 2, rectangle.getHeight() / 2);
+				return new Point2D.Double(world.getX(), world.getY());
 			} else if ((x + rectangle.getWidth() / 2)
 					* (x + rectangle.getWidth() / 2)
 					+ (y - rectangle.getHeight() / 2)
 					* (y - rectangle.getHeight() / 2) <= (3) * (3)) {
-				return new Point2D.Double(selected.getX()
-						+ rectangle.getWidth() / 2, selected.getY()
-						- rectangle.getHeight() / 2);
+				Point2D world = Transformation.objectToWorld(rectangle,
+						rectangle.getWidth() / 2, -rectangle.getHeight() / 2);
+				return new Point2D.Double(world.getX(), world.getY());
 			} else if ((x - rectangle.getWidth() / 2)
 					* (x - rectangle.getWidth() / 2)
 					+ (y - rectangle.getHeight() / 2)
 					* (y - rectangle.getHeight() / 2) <= (3) * (3)) {
-				return new Point2D.Double(selected.getX()
-						- rectangle.getWidth() / 2, selected.getY()
-						- rectangle.getHeight() / 2);
+				Point2D world = Transformation.objectToWorld(rectangle,
+						-rectangle.getWidth() / 2, -rectangle.getHeight() / 2);
+				return new Point2D.Double(world.getX(), world.getY());
 			}
 		} else if (selected instanceof Circle) {
 

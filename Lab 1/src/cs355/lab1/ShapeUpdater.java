@@ -52,20 +52,27 @@ public class ShapeUpdater {
 
 		Rectangle rectangle = (Rectangle) shape;
 
-		if (x2 >= x1) {
-			rectangle.setWidth(x2 - x1);
-			rectangle.setX(x1 + rectangle.getWidth() / 2);
+		Point2D objectCoords1 = Transformation.worldToObject(shape, x1, y1);
+
+		Point2D objectCoords2 = Transformation.worldToObject(shape, x2, y2);
+
+		if (objectCoords2.getX() >= objectCoords1.getX()) {
+			rectangle.setWidth(objectCoords2.getX() - objectCoords1.getX());
 		} else {
-			rectangle.setWidth(x1 - x2);
-			rectangle.setX(x2 + rectangle.getWidth() / 2);
+			rectangle.setWidth(objectCoords1.getX() - objectCoords2.getX());
 		}
-		if (y2 >= y1) {
-			rectangle.setHeight(y2 - y1);
-			rectangle.setY(y1 + rectangle.getHeight() / 2);
+		if (objectCoords2.getY() >= objectCoords1.getY()) {
+			rectangle.setHeight(objectCoords2.getY() - objectCoords1.getY());
 		} else {
-			rectangle.setHeight(y1 - y2);
-			rectangle.setY(y2 + rectangle.getHeight() / 2);
+			rectangle.setHeight(objectCoords1.getY() - objectCoords2.getY());
 		}
+
+		Point2D worldCoordCenter = Transformation.objectToWorld(shape,
+				(objectCoords1.getX() + objectCoords2.getX()) / 2,
+				(objectCoords1.getY() + objectCoords2.getY()) / 2);
+
+		rectangle.setX(worldCoordCenter.getX());
+		rectangle.setY(worldCoordCenter.getY());
 	}
 
 	public void updateCircle(Shape shape, double x2, double y2) {
