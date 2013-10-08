@@ -3,6 +3,7 @@ package cs355.lab1;
 import java.awt.Color;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.geom.AffineTransform;
 import java.awt.geom.Point2D;
 
 import cs355.CS355Controller;
@@ -185,8 +186,7 @@ public class MyController extends MouseAdapter implements CS355Controller {
 			break;
 
 		case RECTANGLE:
-			updater.updateRectangle(shape, e.getX() - shape.getX(), e.getY()
-					- shape.getY());
+			updater.updateRectangle(shape, e.getX(), e.getY());
 			break;
 
 		case CIRCLE:
@@ -225,8 +225,7 @@ public class MyController extends MouseAdapter implements CS355Controller {
 					if (shape instanceof Square) {
 						updater.updateSquare(shape, e.getX(), e.getY());
 					} else if (shape instanceof Rectangle) {
-						updater.updateRectangle(shape, e.getX() - shape.getX(),
-								e.getY() - shape.getY());
+						updater.updateRectangle(shape, e.getX(), e.getY());
 					} else if (shape instanceof Circle) {
 						updater.updateCircle(shape, e.getX(), e.getY());
 					} else if (shape instanceof Ellipse) {

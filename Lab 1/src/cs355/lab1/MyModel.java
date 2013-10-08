@@ -152,26 +152,30 @@ public class MyModel {
 			if ((x + rectangle.getWidth() / 2) * (x + rectangle.getWidth() / 2)
 					+ (y + rectangle.getHeight() / 2)
 					* (y + rectangle.getHeight() / 2) <= (3) * (3)) {
-				return new Point2D.Double(rectangle.getWidth() / 2,
-						rectangle.getHeight() / 2);
+				return new Point2D.Double(selected.getX()
+						+ rectangle.getWidth() / 2, selected.getY()
+						+ rectangle.getHeight() / 2);
 			} else if ((x - rectangle.getWidth() / 2)
 					* (x - rectangle.getWidth() / 2)
 					+ (y + rectangle.getHeight() / 2)
 					* (y + rectangle.getHeight() / 2) <= (3) * (3)) {
-				return new Point2D.Double(-rectangle.getWidth() / 2,
-						rectangle.getHeight() / 2);
+				return new Point2D.Double(selected.getX()
+						- rectangle.getWidth() / 2, selected.getY()
+						+ rectangle.getHeight() / 2);
 			} else if ((x + rectangle.getWidth() / 2)
 					* (x + rectangle.getWidth() / 2)
 					+ (y - rectangle.getHeight() / 2)
 					* (y - rectangle.getHeight() / 2) <= (3) * (3)) {
-				return new Point2D.Double(rectangle.getWidth() / 2,
-						-rectangle.getHeight() / 2);
+				return new Point2D.Double(selected.getX()
+						+ rectangle.getWidth() / 2, selected.getY()
+						- rectangle.getHeight() / 2);
 			} else if ((x - rectangle.getWidth() / 2)
 					* (x - rectangle.getWidth() / 2)
 					+ (y - rectangle.getHeight() / 2)
 					* (y - rectangle.getHeight() / 2) <= (3) * (3)) {
-				return new Point2D.Double(-rectangle.getWidth() / 2,
-						-rectangle.getHeight() / 2);
+				return new Point2D.Double(selected.getX()
+						- rectangle.getWidth() / 2, selected.getY()
+						- rectangle.getHeight() / 2);
 			}
 		} else if (selected instanceof Circle) {
 

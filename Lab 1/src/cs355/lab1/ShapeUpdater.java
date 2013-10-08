@@ -9,6 +9,14 @@ public class ShapeUpdater {
 	private double x1;
 	private double y1;
 
+	public double getX1() {
+		return x1;
+	}
+
+	public double getY1() {
+		return y1;
+	}
+
 	public void setX1(double x1) {
 		this.x1 = x1;
 	}
@@ -44,26 +52,19 @@ public class ShapeUpdater {
 
 		Rectangle rectangle = (Rectangle) shape;
 
-		AffineTransform transform = new AffineTransform();
-		transform.rotate(-rectangle.getRotation());
-		Point2D point = new Point2D.Double();
-		transform.transform(new Point2D.Double(x2, y2), point);
-		x2 = point.getX();
-		y2 = point.getY();
-
 		if (x2 >= x1) {
 			rectangle.setWidth(x2 - x1);
-			rectangle.setX(rectangle.getX() + x1 + rectangle.getWidth() / 2);
+			rectangle.setX(x1 + rectangle.getWidth() / 2);
 		} else {
 			rectangle.setWidth(x1 - x2);
-			rectangle.setX(rectangle.getX() + x2 + rectangle.getWidth() / 2);
+			rectangle.setX(x2 + rectangle.getWidth() / 2);
 		}
 		if (y2 >= y1) {
 			rectangle.setHeight(y2 - y1);
-			rectangle.setY(rectangle.getY() + y1 + rectangle.getHeight() / 2);
+			rectangle.setY(y1 + rectangle.getHeight() / 2);
 		} else {
 			rectangle.setHeight(y1 - y2);
-			rectangle.setY(rectangle.getY() + y2 + rectangle.getHeight() / 2);
+			rectangle.setY(y2 + rectangle.getHeight() / 2);
 		}
 	}
 
