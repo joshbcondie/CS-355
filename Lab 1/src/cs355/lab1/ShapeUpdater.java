@@ -29,23 +29,36 @@ public class ShapeUpdater {
 
 		Square square = (Square) shape;
 
-		if (Math.abs(x2 - x1) < Math.abs(y2 - y1)) {
-			square.setSize(Math.abs(x2 - x1));
-			square.setX(Math.min(x2, x1) + square.getSize() / 2);
-			if (y2 < y1) {
-				square.setY(y1 - square.getSize() / 2);
-			} else {
-				square.setY(y1 + square.getSize() / 2);
-			}
+		Point2D objectCoords1 = Transformation.worldToObject(shape, x1, y1);
+
+		Point2D objectCoords2 = Transformation.worldToObject(shape, x2, y2);
+
+		if (Math.abs(objectCoords2.getX() - objectCoords1.getX()) < Math
+				.abs(objectCoords2.getY() - objectCoords1.getY())) {
+			square.setSize(Math.abs(objectCoords2.getX() - objectCoords1.getX()));
 		} else {
-			square.setSize(Math.abs(y2 - y1));
-			square.setY(Math.min(y2, y1) + square.getSize() / 2);
-			if (x2 < x1) {
-				square.setX(x1 - square.getSize() / 2);
-			} else {
-				square.setX(x1 + square.getSize() / 2);
-			}
+			square.setSize(Math.abs(objectCoords2.getY() - objectCoords1.getY()));
 		}
+
+		double localX = 0;
+
+		if (objectCoords2.getX() >= objectCoords1.getX())
+			localX = objectCoords1.getX() + square.getSize() / 2;
+		else
+			localX = objectCoords1.getX() - square.getSize() / 2;
+
+		double localY = 0;
+
+		if (objectCoords2.getY() >= objectCoords1.getY())
+			localY = objectCoords1.getY() + square.getSize() / 2;
+		else
+			localY = objectCoords1.getY() - square.getSize() / 2;
+
+		Point2D worldCoordCenter = Transformation.objectToWorld(shape, localX,
+				localY);
+
+		square.setX(worldCoordCenter.getX());
+		square.setY(worldCoordCenter.getY());
 	}
 
 	public void updateRectangle(Shape shape, double x2, double y2) {

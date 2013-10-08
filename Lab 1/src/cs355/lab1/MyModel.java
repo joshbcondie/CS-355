@@ -130,20 +130,24 @@ public class MyModel {
 
 			if ((x + square.getSize() / 2) * (x + square.getSize() / 2)
 					+ (y + square.getSize() / 2) * (y + square.getSize() / 2) <= (3) * (3)) {
-				return new Point2D.Double(selected.getX() + square.getSize()
-						/ 2, selected.getY() + square.getSize() / 2);
+				Point2D world = Transformation.objectToWorld(square,
+						square.getSize() / 2, square.getSize() / 2);
+				return new Point2D.Double(world.getX(), world.getY());
 			} else if ((x - square.getSize() / 2) * (x - square.getSize() / 2)
 					+ (y + square.getSize() / 2) * (y + square.getSize() / 2) <= (3) * (3)) {
-				return new Point2D.Double(selected.getX() - square.getSize()
-						/ 2, selected.getY() + square.getSize() / 2);
+				Point2D world = Transformation.objectToWorld(square,
+						-square.getSize() / 2, square.getSize() / 2);
+				return new Point2D.Double(world.getX(), world.getY());
 			} else if ((x + square.getSize() / 2) * (x + square.getSize() / 2)
 					+ (y - square.getSize() / 2) * (y - square.getSize() / 2) <= (3) * (3)) {
-				return new Point2D.Double(selected.getX() + square.getSize()
-						/ 2, selected.getY() - square.getSize() / 2);
+				Point2D world = Transformation.objectToWorld(square,
+						square.getSize() / 2, -square.getSize() / 2);
+				return new Point2D.Double(world.getX(), world.getY());
 			} else if ((x - square.getSize() / 2) * (x - square.getSize() / 2)
 					+ (y - square.getSize() / 2) * (y - square.getSize() / 2) <= (3) * (3)) {
-				return new Point2D.Double(selected.getX() - square.getSize()
-						/ 2, selected.getY() - square.getSize() / 2);
+				Point2D world = Transformation.objectToWorld(square,
+						-square.getSize() / 2, -square.getSize() / 2);
+				return new Point2D.Double(world.getX(), world.getY());
 			}
 		} else if (selected instanceof Rectangle) {
 
