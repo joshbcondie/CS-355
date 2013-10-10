@@ -28,6 +28,7 @@ public class MyController extends MouseAdapter implements CS355Controller {
 	private double x2, y2;
 	private int clicks;
 	private ShapeUpdater updater;
+	private boolean notLeftButton;
 
 	public MyController(MyModel model) {
 		this.model = model;
@@ -39,6 +40,7 @@ public class MyController extends MouseAdapter implements CS355Controller {
 		y1 = 0;
 		clicks = 0;
 		updater = new ShapeUpdater();
+		notLeftButton = true;
 	}
 
 	@Override
@@ -111,6 +113,12 @@ public class MyController extends MouseAdapter implements CS355Controller {
 	@Override
 	public void mousePressed(MouseEvent e) {
 
+		if (e.getButton() != MouseEvent.BUTTON1) {
+			return;
+		}
+
+		notLeftButton = false;
+
 		updater.setX1(e.getX());
 		updater.setY1(e.getY());
 
@@ -178,6 +186,9 @@ public class MyController extends MouseAdapter implements CS355Controller {
 
 	@Override
 	public void mouseDragged(MouseEvent e) {
+
+		if (notLeftButton)
+			return;
 
 		switch (mode) {
 
@@ -256,6 +267,11 @@ public class MyController extends MouseAdapter implements CS355Controller {
 	@Override
 	public void mouseReleased(MouseEvent e) {
 
+		if (e.getButton() != MouseEvent.BUTTON1)
+			return;
+
+		notLeftButton = true;
+
 		if (mode != Mode.SELECT) {
 			shape = null;
 		}
@@ -263,6 +279,9 @@ public class MyController extends MouseAdapter implements CS355Controller {
 
 	@Override
 	public void mouseClicked(MouseEvent e) {
+
+		if (e.getButton() != MouseEvent.BUTTON1)
+			return;
 
 		if (mode == Mode.TRIANGLE) {
 			if (clicks == 0) {

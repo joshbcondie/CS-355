@@ -30,13 +30,7 @@ public class MyModel {
 
 	public Point2D testRotationHandle(double x, double y, Shape selected) {
 
-		x -= selected.getX();
-		y -= selected.getY();
-
-		AffineTransform transform = new AffineTransform();
-		transform.rotate(-selected.getRotation());
-		Point2D point = new Point2D.Double();
-		transform.transform(new Point2D.Double(x, y), point);
+		Point2D point = Transformation.worldToObject(selected, x, y);
 		x = point.getX();
 		y = point.getY();
 
@@ -114,13 +108,7 @@ public class MyModel {
 			}
 		}
 
-		x -= selected.getX();
-		y -= selected.getY();
-
-		AffineTransform transform = new AffineTransform();
-		transform.rotate(-selected.getRotation());
-		Point2D point = new Point2D.Double();
-		transform.transform(new Point2D.Double(x, y), point);
+		Point2D point = Transformation.worldToObject(selected, x, y);
 		x = point.getX();
 		y = point.getY();
 
@@ -290,13 +278,10 @@ public class MyModel {
 				continue;
 			}
 
-			x -= shapes.get(i).getX();
-			y -= shapes.get(i).getY();
+			double originalX = x;
+			double originalY = y;
 
-			AffineTransform transform = new AffineTransform();
-			transform.rotate(-shapes.get(i).getRotation());
-			Point2D point = new Point2D.Double();
-			transform.transform(new Point2D.Double(x, y), point);
+			Point2D point = Transformation.worldToObject(shapes.get(i), x, y);
 			x = point.getX();
 			y = point.getY();
 
@@ -367,15 +352,8 @@ public class MyModel {
 				}
 			}
 
-			AffineTransform inverseTransform = new AffineTransform();
-			inverseTransform.rotate(shapes.get(i).getRotation());
-			Point2D point2 = new Point2D.Double();
-			inverseTransform.transform(new Point2D.Double(x, y), point2);
-			x = point2.getX();
-			y = point2.getY();
-
-			x += shapes.get(i).getX();
-			y += shapes.get(i).getY();
+			x = originalX;
+			y = originalY;
 		}
 
 		return null;

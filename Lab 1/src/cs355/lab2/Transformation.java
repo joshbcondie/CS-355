@@ -24,6 +24,7 @@ public class Transformation {
 	}
 
 	public static Point2D worldToObject(Shape shape, double x, double y) {
+		
 		AffineTransform transform = new AffineTransform();
 
 		transform

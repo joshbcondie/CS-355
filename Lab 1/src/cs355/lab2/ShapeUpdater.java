@@ -159,15 +159,11 @@ public class ShapeUpdater {
 		triangle.setX3(triangle.getX3() - centerX);
 		triangle.setY3(triangle.getY3() - centerY);
 
-		AffineTransform transform = new AffineTransform();
-		transform.rotate(triangle.getRotation());
-		Point2D point = new Point2D.Double();
-		transform.transform(new Point2D.Double(centerX, centerY), point);
-		centerX = point.getX();
-		centerY = point.getY();
+		Point2D point = Transformation
+				.objectToWorld(triangle, centerX, centerY);
 
-		triangle.setX(triangle.getX() + centerX);
-		triangle.setY(triangle.getY() + centerY);
+		triangle.setX(point.getX());
+		triangle.setY(point.getY());
 	}
 
 	public void updateTriangle(Shape shape, double x2, double y2) {
@@ -175,7 +171,12 @@ public class ShapeUpdater {
 		Triangle triangle = (Triangle) shape;
 
 		AffineTransform transform = new AffineTransform();
-		transform.rotate(-triangle.getRotation());
+		transform
+				.concatenate(new AffineTransform(new double[] {
+						Math.cos(shape.getRotation()),
+						-Math.sin(shape.getRotation()),
+						Math.sin(shape.getRotation()),
+						Math.cos(shape.getRotation()) }));
 		Point2D point = new Point2D.Double();
 		transform.transform(new Point2D.Double(x2, y2), point);
 		x2 = point.getX();

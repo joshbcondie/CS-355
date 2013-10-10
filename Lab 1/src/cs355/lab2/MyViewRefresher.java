@@ -109,14 +109,21 @@ public class MyViewRefresher implements ViewRefresher {
 		g2d.setColor(new Color(255 - color.getRed(), 255 - color.getGreen(),
 				255 - color.getBlue()));
 
-		AffineTransform transform = g2d.getTransform();
+		AffineTransform original = g2d.getTransform();
 
-		g2d.translate((int) controller.getSelected().getX(), (int) controller
-				.getSelected().getY());
+		AffineTransform transform = new AffineTransform();
 
-		if (controller.getSelected().getRotation() != 0) {
-			g2d.rotate(controller.getSelected().getRotation());
-		}
+		transform.concatenate(new AffineTransform(new double[] { 1, 0, 0, 1,
+				controller.getSelected().getX(),
+				controller.getSelected().getY() }));
+
+		transform.concatenate(new AffineTransform(new double[] {
+				Math.cos(controller.getSelected().getRotation()),
+				Math.sin(controller.getSelected().getRotation()),
+				-Math.sin(controller.getSelected().getRotation()),
+				Math.cos(controller.getSelected().getRotation()) }));
+
+		g2d.setTransform(transform);
 
 		if (controller.getSelected() instanceof Square) {
 
@@ -446,7 +453,7 @@ public class MyViewRefresher implements ViewRefresher {
 
 		}
 
-		g2d.setTransform(transform);
+		g2d.setTransform(original);
 	}
 
 	@Override
@@ -465,13 +472,18 @@ public class MyViewRefresher implements ViewRefresher {
 				continue;
 			}
 
-			AffineTransform transform = g2d.getTransform();
+			AffineTransform original = g2d.getTransform();
 
-			g2d.translate((int) s.getX(), (int) s.getY());
+			AffineTransform transform = new AffineTransform();
 
-			if (s.getRotation() != 0) {
-				g2d.rotate(s.getRotation());
-			}
+			transform.concatenate(new AffineTransform(new double[] { 1, 0, 0,
+					1, s.getX(), s.getY() }));
+
+			transform.concatenate(new AffineTransform(new double[] {
+					Math.cos(s.getRotation()), Math.sin(s.getRotation()),
+					-Math.sin(s.getRotation()), Math.cos(s.getRotation()) }));
+
+			g2d.setTransform(transform);
 
 			if (s instanceof Square) {
 
@@ -503,7 +515,7 @@ public class MyViewRefresher implements ViewRefresher {
 				drawTriangle(g2d, triangle);
 			}
 
-			g2d.setTransform(transform);
+			g2d.setTransform(original);
 		}
 
 		drawSelectedOutline(g2d);
