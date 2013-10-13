@@ -418,11 +418,11 @@ class CS355Frame extends javax.swing.JFrame {
 	}// GEN-LAST:event_jButton8ActionPerformed
 
 	private void jButton10ActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_jButton10ActionPerformed
-		controller.zoomInButtonHit();
+		controller.zoomOutButtonHit();
 	}// GEN-LAST:event_jButton10ActionPerformed
 
 	private void jButton9ActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_jButton9ActionPerformed
-		controller.zoomOutButtonHit();
+		controller.zoomInButtonHit();
 	}// GEN-LAST:event_jButton9ActionPerformed
 
 	private void jScrollBar2AdjustmentValueChanged(

@@ -11,10 +11,12 @@ public class MyViewRefresher implements ViewRefresher {
 
 	MyModel model;
 	MyController controller;
+	Viewport viewport;
 
 	public MyViewRefresher(MyModel model, MyController controller) {
 		this.model = model;
 		this.controller = controller;
+		viewport = controller.getViewport();
 	}
 
 	private void drawLine(Graphics2D g2d, Line line) {
@@ -475,6 +477,8 @@ public class MyViewRefresher implements ViewRefresher {
 			AffineTransform original = g2d.getTransform();
 
 			AffineTransform transform = new AffineTransform();
+
+			transform.concatenate(viewport.getWorldToView());
 
 			transform.concatenate(new AffineTransform(new double[] { 1, 0, 0,
 					1, s.getX(), s.getY() }));

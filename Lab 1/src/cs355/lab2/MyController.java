@@ -3,7 +3,6 @@ package cs355.lab2;
 import java.awt.Color;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.geom.AffineTransform;
 import java.awt.geom.Point2D;
 
 import cs355.CS355Controller;
@@ -29,6 +28,7 @@ public class MyController extends MouseAdapter implements CS355Controller {
 	private int clicks;
 	private ShapeUpdater updater;
 	private boolean notLeftButton;
+	private Viewport viewport;
 
 	public MyController(MyModel model) {
 		this.model = model;
@@ -41,6 +41,7 @@ public class MyController extends MouseAdapter implements CS355Controller {
 		clicks = 0;
 		updater = new ShapeUpdater();
 		notLeftButton = true;
+		setViewport(new Viewport());
 	}
 
 	@Override
@@ -316,12 +317,14 @@ public class MyController extends MouseAdapter implements CS355Controller {
 
 	@Override
 	public void zoomInButtonHit() {
-		// TODO Auto-generated method stub
+		viewport.zoomIn();
+		GUIFunctions.refresh();
 	}
 
 	@Override
 	public void zoomOutButtonHit() {
-		// TODO Auto-generated method stub
+		viewport.zoomOut();
+		GUIFunctions.refresh();
 	}
 
 	@Override
@@ -340,6 +343,14 @@ public class MyController extends MouseAdapter implements CS355Controller {
 			return shape;
 		}
 		return null;
+	}
+
+	public Viewport getViewport() {
+		return viewport;
+	}
+
+	public void setViewport(Viewport viewport) {
+		this.viewport = viewport;
 	}
 
 }
