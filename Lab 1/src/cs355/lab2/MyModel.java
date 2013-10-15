@@ -1,12 +1,8 @@
 package cs355.lab2;
 
-import java.awt.geom.AffineTransform;
 import java.awt.geom.Point2D;
-import java.awt.geom.Point2D.Double;
 import java.util.ArrayList;
 import java.util.List;
-
-import com.sun.org.glassfish.external.statistics.annotations.Reset;
 
 public class MyModel {
 
@@ -28,7 +24,8 @@ public class MyModel {
 		shapes.remove(shape);
 	}
 
-	public Point2D testRotationHandle(double x, double y, Shape selected) {
+	public Point2D testRotationHandle(double x, double y, Shape selected,
+			double scale) {
 
 		Point2D point = Transformation.worldToObject(selected, x, y);
 		x = point.getX();
@@ -39,7 +36,8 @@ public class MyModel {
 			Square square = (Square) selected;
 
 			if ((x) * (x) + (y + square.getSize() * 3 / 4)
-					* (y + square.getSize() * 3 / 4) <= (3) * (3)) {
+					* (y + square.getSize() * 3 / 4) <= (3 / scale)
+					* (3 / scale)) {
 				return new Point2D.Double(selected.getX(), selected.getY()
 						- square.getSize() * 3 / 4);
 			}
@@ -48,7 +46,8 @@ public class MyModel {
 			Rectangle rectangle = (Rectangle) selected;
 
 			if ((x) * (x) + (y + rectangle.getHeight() * 3 / 4)
-					* (y + rectangle.getHeight() * 3 / 4) <= (3) * (3)) {
+					* (y + rectangle.getHeight() * 3 / 4) <= (3 / scale)
+					* (3 / scale)) {
 				return new Point2D.Double(selected.getX(), selected.getY()
 						- rectangle.getHeight() * 3 / 4);
 			}
@@ -57,7 +56,8 @@ public class MyModel {
 			Ellipse ellipse = (Ellipse) selected;
 
 			if ((x) * (x) + (y + ellipse.getHeight() * 3 / 4)
-					* (y + ellipse.getHeight() * 3 / 4) <= (3) * (3)) {
+					* (y + ellipse.getHeight() * 3 / 4) <= (3 / scale)
+					* (3 / scale)) {
 				return new Point2D.Double(selected.getX(), selected.getY()
 						- ellipse.getHeight() * 3 / 4);
 			}
@@ -70,7 +70,8 @@ public class MyModel {
 					+ (y - Math.min(triangle.getY1(),
 							Math.min(triangle.getY2(), triangle.getY3())) * 3 / 2)
 					* (y - Math.min(triangle.getY1(),
-							Math.min(triangle.getY2(), triangle.getY3())) * 3 / 2) <= (3) * (3)) {
+							Math.min(triangle.getY2(), triangle.getY3())) * 3 / 2) <= (3 / scale)
+					* (3 / scale)) {
 				return new Point2D.Double(selected.getX()
 						+ Math.min(triangle.getY1(),
 								Math.min(triangle.getY2(), triangle.getY3())),
@@ -85,14 +86,14 @@ public class MyModel {
 		return null;
 	}
 
-	public Point2D testHandles(double x, double y, Shape selected) {
+	public Point2D testHandles(double x, double y, Shape selected, double scale) {
 
 		if (selected instanceof Line) {
 
 			Line line = (Line) selected;
 
 			if ((x - line.getX1()) * (x - line.getX1()) + (y - line.getY1())
-					* (y - line.getY1()) <= (3) * (3)) {
+					* (y - line.getY1()) <= (3 / scale) * (3 / scale)) {
 
 				double x1 = line.getX1();
 				double y1 = line.getY1();
@@ -103,7 +104,8 @@ public class MyModel {
 
 				return new Point2D.Double(line.getX2(), line.getY2());
 			} else if ((x - line.getX2()) * (x - line.getX2())
-					+ (y - line.getY2()) * (y - line.getY2()) <= (3) * (3)) {
+					+ (y - line.getY2()) * (y - line.getY2()) <= (3 / scale)
+					* (3 / scale)) {
 				return new Point2D.Double(line.getX2(), line.getY2());
 			}
 		}
@@ -117,22 +119,26 @@ public class MyModel {
 			Square square = (Square) selected;
 
 			if ((x + square.getSize() / 2) * (x + square.getSize() / 2)
-					+ (y + square.getSize() / 2) * (y + square.getSize() / 2) <= (3) * (3)) {
+					+ (y + square.getSize() / 2) * (y + square.getSize() / 2) <= (3 / scale)
+					* (3 / scale)) {
 				Point2D world = Transformation.objectToWorld(square,
 						square.getSize() / 2, square.getSize() / 2);
 				return new Point2D.Double(world.getX(), world.getY());
 			} else if ((x - square.getSize() / 2) * (x - square.getSize() / 2)
-					+ (y + square.getSize() / 2) * (y + square.getSize() / 2) <= (3) * (3)) {
+					+ (y + square.getSize() / 2) * (y + square.getSize() / 2) <= (3 / scale)
+					* (3 / scale)) {
 				Point2D world = Transformation.objectToWorld(square,
 						-square.getSize() / 2, square.getSize() / 2);
 				return new Point2D.Double(world.getX(), world.getY());
 			} else if ((x + square.getSize() / 2) * (x + square.getSize() / 2)
-					+ (y - square.getSize() / 2) * (y - square.getSize() / 2) <= (3) * (3)) {
+					+ (y - square.getSize() / 2) * (y - square.getSize() / 2) <= (3 / scale)
+					* (3 / scale)) {
 				Point2D world = Transformation.objectToWorld(square,
 						square.getSize() / 2, -square.getSize() / 2);
 				return new Point2D.Double(world.getX(), world.getY());
 			} else if ((x - square.getSize() / 2) * (x - square.getSize() / 2)
-					+ (y - square.getSize() / 2) * (y - square.getSize() / 2) <= (3) * (3)) {
+					+ (y - square.getSize() / 2) * (y - square.getSize() / 2) <= (3 / scale)
+					* (3 / scale)) {
 				Point2D world = Transformation.objectToWorld(square,
 						-square.getSize() / 2, -square.getSize() / 2);
 				return new Point2D.Double(world.getX(), world.getY());
@@ -143,7 +149,8 @@ public class MyModel {
 
 			if ((x + rectangle.getWidth() / 2) * (x + rectangle.getWidth() / 2)
 					+ (y + rectangle.getHeight() / 2)
-					* (y + rectangle.getHeight() / 2) <= (3) * (3)) {
+					* (y + rectangle.getHeight() / 2) <= (3 / scale)
+					* (3 / scale)) {
 
 				Point2D world = Transformation.objectToWorld(rectangle,
 						rectangle.getWidth() / 2, rectangle.getHeight() / 2);
@@ -151,21 +158,24 @@ public class MyModel {
 			} else if ((x - rectangle.getWidth() / 2)
 					* (x - rectangle.getWidth() / 2)
 					+ (y + rectangle.getHeight() / 2)
-					* (y + rectangle.getHeight() / 2) <= (3) * (3)) {
+					* (y + rectangle.getHeight() / 2) <= (3 / scale)
+					* (3 / scale)) {
 				Point2D world = Transformation.objectToWorld(rectangle,
 						-rectangle.getWidth() / 2, rectangle.getHeight() / 2);
 				return new Point2D.Double(world.getX(), world.getY());
 			} else if ((x + rectangle.getWidth() / 2)
 					* (x + rectangle.getWidth() / 2)
 					+ (y - rectangle.getHeight() / 2)
-					* (y - rectangle.getHeight() / 2) <= (3) * (3)) {
+					* (y - rectangle.getHeight() / 2) <= (3 / scale)
+					* (3 / scale)) {
 				Point2D world = Transformation.objectToWorld(rectangle,
 						rectangle.getWidth() / 2, -rectangle.getHeight() / 2);
 				return new Point2D.Double(world.getX(), world.getY());
 			} else if ((x - rectangle.getWidth() / 2)
 					* (x - rectangle.getWidth() / 2)
 					+ (y - rectangle.getHeight() / 2)
-					* (y - rectangle.getHeight() / 2) <= (3) * (3)) {
+					* (y - rectangle.getHeight() / 2) <= (3 / scale)
+					* (3 / scale)) {
 				Point2D world = Transformation.objectToWorld(rectangle,
 						-rectangle.getWidth() / 2, -rectangle.getHeight() / 2);
 				return new Point2D.Double(world.getX(), world.getY());
@@ -175,19 +185,23 @@ public class MyModel {
 			Circle circle = (Circle) selected;
 
 			if ((x + circle.getRadius()) * (x + circle.getRadius())
-					+ (y + circle.getRadius()) * (y + circle.getRadius()) <= (3) * (3)) {
+					+ (y + circle.getRadius()) * (y + circle.getRadius()) <= (3 / scale)
+					* (3 / scale)) {
 				return new Point2D.Double(selected.getX() + circle.getRadius(),
 						selected.getY() + circle.getRadius());
 			} else if ((x - circle.getRadius()) * (x - circle.getRadius())
-					+ (y + circle.getRadius()) * (y + circle.getRadius()) <= (3) * (3)) {
+					+ (y + circle.getRadius()) * (y + circle.getRadius()) <= (3 / scale)
+					* (3 / scale)) {
 				return new Point2D.Double(selected.getX() - circle.getRadius(),
 						selected.getY() + circle.getRadius());
 			} else if ((x + circle.getRadius()) * (x + circle.getRadius())
-					+ (y - circle.getRadius()) * (y - circle.getRadius()) <= (3) * (3)) {
+					+ (y - circle.getRadius()) * (y - circle.getRadius()) <= (3 / scale)
+					* (3 / scale)) {
 				return new Point2D.Double(selected.getX() + circle.getRadius(),
 						selected.getY() - circle.getRadius());
 			} else if ((x - circle.getRadius()) * (x - circle.getRadius())
-					+ (y - circle.getRadius()) * (y - circle.getRadius()) <= (3) * (3)) {
+					+ (y - circle.getRadius()) * (y - circle.getRadius()) <= (3 / scale)
+					* (3 / scale)) {
 				return new Point2D.Double(selected.getX() - circle.getRadius(),
 						selected.getY() - circle.getRadius());
 			}
@@ -197,28 +211,32 @@ public class MyModel {
 
 			if ((x + ellipse.getWidth() / 2) * (x + ellipse.getWidth() / 2)
 					+ (y + ellipse.getHeight() / 2)
-					* (y + ellipse.getHeight() / 2) <= (3) * (3)) {
+					* (y + ellipse.getHeight() / 2) <= (3 / scale)
+					* (3 / scale)) {
 				Point2D world = Transformation.objectToWorld(ellipse,
 						ellipse.getWidth() / 2, ellipse.getHeight() / 2);
 				return new Point2D.Double(world.getX(), world.getY());
 			} else if ((x - ellipse.getWidth() / 2)
 					* (x - ellipse.getWidth() / 2)
 					+ (y + ellipse.getHeight() / 2)
-					* (y + ellipse.getHeight() / 2) <= (3) * (3)) {
+					* (y + ellipse.getHeight() / 2) <= (3 / scale)
+					* (3 / scale)) {
 				Point2D world = Transformation.objectToWorld(ellipse,
 						-ellipse.getWidth() / 2, ellipse.getHeight() / 2);
 				return new Point2D.Double(world.getX(), world.getY());
 			} else if ((x + ellipse.getWidth() / 2)
 					* (x + ellipse.getWidth() / 2)
 					+ (y - ellipse.getHeight() / 2)
-					* (y - ellipse.getHeight() / 2) <= (3) * (3)) {
+					* (y - ellipse.getHeight() / 2) <= (3 / scale)
+					* (3 / scale)) {
 				Point2D world = Transformation.objectToWorld(ellipse,
 						ellipse.getWidth() / 2, -ellipse.getHeight() / 2);
 				return new Point2D.Double(world.getX(), world.getY());
 			} else if ((x - ellipse.getWidth() / 2)
 					* (x - ellipse.getWidth() / 2)
 					+ (y - ellipse.getHeight() / 2)
-					* (y - ellipse.getHeight() / 2) <= (3) * (3)) {
+					* (y - ellipse.getHeight() / 2) <= (3 / scale)
+					* (3 / scale)) {
 				Point2D world = Transformation.objectToWorld(ellipse,
 						-ellipse.getWidth() / 2, -ellipse.getHeight() / 2);
 				return new Point2D.Double(world.getX(), world.getY());
@@ -228,15 +246,18 @@ public class MyModel {
 			Triangle triangle = (Triangle) selected;
 
 			if ((x - triangle.getX1()) * (x - triangle.getX1())
-					+ (y - triangle.getY1()) * (y - triangle.getY1()) <= (3) * (3)) {
+					+ (y - triangle.getY1()) * (y - triangle.getY1()) <= (3 / scale)
+					* (3 / scale)) {
 				triangle.setCornerSelected(0);
 				return new Point2D.Double(triangle.getX1(), triangle.getY1());
 			} else if ((x - triangle.getX2()) * (x - triangle.getX2())
-					+ (y - triangle.getY2()) * (y - triangle.getY2()) <= (3) * (3)) {
+					+ (y - triangle.getY2()) * (y - triangle.getY2()) <= (3 / scale)
+					* (3 / scale)) {
 				triangle.setCornerSelected(1);
 				return new Point2D.Double(triangle.getX2(), triangle.getY2());
 			} else if ((x - triangle.getX3()) * (x - triangle.getX3())
-					+ (y - triangle.getY3()) * (y - triangle.getY3()) <= (3) * (3)) {
+					+ (y - triangle.getY3()) * (y - triangle.getY3()) <= (3 / scale)
+					* (3 / scale)) {
 				triangle.setCornerSelected(2);
 				return new Point2D.Double(triangle.getX3(), triangle.getY3());
 			}
@@ -245,7 +266,8 @@ public class MyModel {
 		return null;
 	}
 
-	public Shape getSelectedShape(double x, double y, int tolerance) {
+	public Shape getSelectedShape(double x, double y, int tolerance,
+			double scale) {
 
 		for (int i = shapes.size() - 1; i >= 0; i--) {
 
@@ -269,8 +291,8 @@ public class MyModel {
 					double projectionY = line.getY1() + dotProduct * dy;
 
 					if ((x - projectionX) * (x - projectionX)
-							+ (y - projectionY) * (y - projectionY) <= tolerance
-							* tolerance) {
+							+ (y - projectionY) * (y - projectionY) <= (tolerance / scale)
+							* (tolerance / scale)) {
 						return line;
 					}
 				}
