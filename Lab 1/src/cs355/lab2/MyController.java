@@ -351,12 +351,14 @@ public class MyController extends MouseAdapter implements CS355Controller {
 
 	@Override
 	public void hScrollbarChanged(int value) {
-		// TODO Auto-generated method stub
+		viewport.setX(value);
+		GUIFunctions.refresh();
 	}
 
 	@Override
 	public void vScrollbarChanged(int value) {
-		// TODO Auto-generated method stub
+		viewport.setY(value);
+		GUIFunctions.refresh();
 	}
 
 	public Shape getSelected() {

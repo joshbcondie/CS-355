@@ -2,6 +2,8 @@ package cs355.lab2;
 
 import java.awt.geom.AffineTransform;
 
+import cs355.GUIFunctions;
+
 public class Viewport {
 
 	private final double WIDTH = 512;
@@ -36,16 +38,24 @@ public class Viewport {
 	public void zoomIn() {
 		if (scale <= 2) {
 			scale *= 2;
-			x += WIDTH / (2 * scale);
-			y += HEIGHT / (2 * scale);
+			GUIFunctions.setHScrollBarKnob((int) (WIDTH / (4 * scale)));
+			GUIFunctions.setVScrollBarKnob((int) (HEIGHT / (4 * scale)));
+			System.out.println(x + WIDTH / (8 * scale));
+			GUIFunctions.setHScrollBarPosit((int) (x + WIDTH / (8 * scale)));
+			GUIFunctions.setVScrollBarPosit((int) (y + HEIGHT / (8 * scale)));
+			System.out.println(x + " " + y);
 		}
 	}
 
 	public void zoomOut() {
 		if (scale >= 0.5) {
 			scale /= 2;
-			x -= WIDTH / (4 * scale);
-			y -= HEIGHT / (4 * scale);
+			GUIFunctions.setHScrollBarKnob(Math.min((int) (WIDTH - 1),
+					(int) (WIDTH / (4 * scale))));
+			GUIFunctions.setVScrollBarKnob(Math.min((int) (WIDTH - 1),
+					(int) (HEIGHT / (4 * scale))));
+			GUIFunctions.setHScrollBarPosit((int) (x - WIDTH / (2 * scale)));
+			GUIFunctions.setVScrollBarPosit((int) (y - HEIGHT / (2 * scale)));
 		}
 	}
 

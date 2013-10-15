@@ -10,5 +10,5 @@ package cs355;
  */
 enum CS355SScrollbarAttrConsts 
 {
-    V_SCROLL_BAR, H_SCROLL_BAR, MIN, MAX, KNOB
+    V_SCROLL_BAR, H_SCROLL_BAR, MIN, MAX, KNOB, POSIT
 }

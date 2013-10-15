@@ -525,6 +525,9 @@ class CS355Frame extends javax.swing.JFrame {
 		case KNOB:
 			scrollbarToChange.setVisibleAmount(number);
 			break;
+		case POSIT:
+			scrollbarToChange.setValue(number);
+			break;
 		default:
 			throw new IllegalArgumentException("Bad Attribute type!");
 

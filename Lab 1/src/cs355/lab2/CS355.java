@@ -29,7 +29,7 @@ public class CS355 {
 		GUIFunctions.setVScrollBarMin(0);
 		GUIFunctions.setHScrollBarMax(512);
 		GUIFunctions.setVScrollBarMax(512);
-		GUIFunctions.setHScrollBarKnob(256);
-		GUIFunctions.setVScrollBarKnob(256);
+		GUIFunctions.setHScrollBarKnob(128);
+		GUIFunctions.setVScrollBarKnob(128);
 	}
 }
