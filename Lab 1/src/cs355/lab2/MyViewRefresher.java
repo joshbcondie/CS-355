@@ -1,5 +1,6 @@
 package cs355.lab2;
 
+import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.geom.AffineTransform;
@@ -21,9 +22,13 @@ public class MyViewRefresher implements ViewRefresher {
 
 	private void drawLine(Graphics2D g2d, Line line) {
 
+		g2d.setStroke(new BasicStroke((float) (1 / viewport.getScale())));
+
 		g2d.drawLine((int) Math.round(line.getX1()),
 				(int) Math.round(line.getY1()), (int) Math.round(line.getX2()),
 				(int) Math.round(line.getY2()));
+
+		g2d.setStroke(new BasicStroke());
 	}
 
 	private void drawSquare(Graphics2D g2d, Square square) {
@@ -75,36 +80,55 @@ public class MyViewRefresher implements ViewRefresher {
 			return;
 		}
 
+		AffineTransform transform = g2d.getTransform();
+
+		transform.concatenate(viewport.getWorldToView());
+
+		g2d.setStroke(new BasicStroke((float) (1 / viewport.getScale())));
+
 		if (controller.getSelected() instanceof Line) {
 
 			Line line = (Line) controller.getSelected();
 
 			g2d.setColor(line.getColor());
+			g2d.setTransform(transform);
 			drawLine(g2d, line);
 
 			// Point 1
 
 			g2d.setColor(Color.WHITE);
 
-			g2d.fillOval((int) Math.round(line.getX1()) - 3,
-					(int) Math.round(line.getY1() - 3), 6, 6);
+			g2d.fillOval(
+					(int) Math.round(line.getX1() - 3 / viewport.getScale()),
+					(int) Math.round(line.getY1() - 3 / viewport.getScale()),
+					(int) Math.round(6 / viewport.getScale()),
+					(int) Math.round(6 / viewport.getScale()));
 
 			g2d.setColor(Color.BLACK);
 
-			g2d.drawOval((int) Math.round(line.getX1()) - 3,
-					(int) Math.round(line.getY1()) - 3, 6, 6);
+			g2d.drawOval(
+					(int) Math.round(line.getX1() - 3 / viewport.getScale()),
+					(int) Math.round(line.getY1() - 3 / viewport.getScale()),
+					(int) Math.round(6 / viewport.getScale()),
+					(int) Math.round(6 / viewport.getScale()));
 
 			// Point 2
 
 			g2d.setColor(Color.WHITE);
 
-			g2d.fillOval((int) Math.round(line.getX2()) - 3,
-					(int) Math.round(line.getY2() - 3), 6, 6);
+			g2d.fillOval(
+					(int) Math.round(line.getX2() - 3 / viewport.getScale()),
+					(int) Math.round(line.getY2() - 3 / viewport.getScale()),
+					(int) Math.round(6 / viewport.getScale()),
+					(int) Math.round(6 / viewport.getScale()));
 
 			g2d.setColor(Color.BLACK);
 
-			g2d.drawOval((int) Math.round(line.getX2()) - 3,
-					(int) Math.round(line.getY2()) - 3, 6, 6);
+			g2d.drawOval(
+					(int) Math.round(line.getX2() - 3 / viewport.getScale()),
+					(int) Math.round(line.getY2() - 3 / viewport.getScale()),
+					(int) Math.round(6 / viewport.getScale()),
+					(int) Math.round(6 / viewport.getScale()));
 		}
 
 		Color color = controller.getSelected().getColor();
@@ -112,8 +136,6 @@ public class MyViewRefresher implements ViewRefresher {
 				255 - color.getBlue()));
 
 		AffineTransform original = g2d.getTransform();
-
-		AffineTransform transform = new AffineTransform();
 
 		transform.concatenate(new AffineTransform(new double[] { 1, 0, 0, 1,
 				controller.getSelected().getX(),
@@ -209,56 +231,100 @@ public class MyViewRefresher implements ViewRefresher {
 
 			g2d.setColor(Color.WHITE);
 
-			g2d.fillOval((int) Math.round(-rectangle.getWidth() / 2) - 3,
-					(int) Math.round(-rectangle.getHeight() / 2 - 3), 6, 6);
+			g2d.fillOval(
+					(int) Math.round(-rectangle.getWidth() / 2 - 3
+							/ viewport.getScale()),
+					(int) Math.round(-rectangle.getHeight() / 2 - 3
+							/ viewport.getScale()),
+					(int) Math.round(6 / viewport.getScale()),
+					(int) Math.round(6 / viewport.getScale()));
 
 			g2d.setColor(Color.BLACK);
 
-			g2d.drawOval((int) Math.round(-rectangle.getWidth() / 2) - 3,
-					(int) Math.round(-rectangle.getHeight() / 2 - 3), 6, 6);
+			g2d.drawOval(
+					(int) Math.round(-rectangle.getWidth() / 2 - 3
+							/ viewport.getScale()),
+					(int) Math.round(-rectangle.getHeight() / 2 - 3
+							/ viewport.getScale()),
+					(int) Math.round(6 / viewport.getScale()),
+					(int) Math.round(6 / viewport.getScale()));
 
 			// Upper right
 
 			g2d.setColor(Color.WHITE);
 
-			g2d.fillOval((int) Math.round(rectangle.getWidth() / 2) - 3,
-					(int) Math.round(-rectangle.getHeight() / 2 - 3), 6, 6);
+			g2d.fillOval(
+					(int) Math.round(rectangle.getWidth() / 2 - 3
+							/ viewport.getScale()),
+					(int) Math.round(-rectangle.getHeight() / 2 - 3
+							/ viewport.getScale()),
+					(int) Math.round(6 / viewport.getScale()),
+					(int) Math.round(6 / viewport.getScale()));
 
 			g2d.setColor(Color.BLACK);
 
-			g2d.drawOval((int) Math.round(rectangle.getWidth() / 2) - 3,
-					(int) Math.round(-rectangle.getHeight() / 2 - 3), 6, 6);
+			g2d.drawOval(
+					(int) Math.round(rectangle.getWidth() / 2 - 3
+							/ viewport.getScale()),
+					(int) Math.round(-rectangle.getHeight() / 2 - 3
+							/ viewport.getScale()),
+					(int) Math.round(6 / viewport.getScale()),
+					(int) Math.round(6 / viewport.getScale()));
 
 			// Lower left
 
 			g2d.setColor(Color.WHITE);
 
-			g2d.fillOval((int) Math.round(-rectangle.getWidth() / 2) - 3,
-					(int) Math.round(rectangle.getHeight() / 2 - 3), 6, 6);
+			g2d.fillOval(
+					(int) Math.round(-rectangle.getWidth() / 2 - 3
+							/ viewport.getScale()),
+					(int) Math.round(rectangle.getHeight() / 2 - 3
+							/ viewport.getScale()),
+					(int) Math.round(6 / viewport.getScale()),
+					(int) Math.round(6 / viewport.getScale()));
 
 			g2d.setColor(Color.BLACK);
 
-			g2d.drawOval((int) Math.round(-rectangle.getWidth() / 2) - 3,
-					(int) Math.round(rectangle.getHeight() / 2 - 3), 6, 6);
+			g2d.drawOval(
+					(int) Math.round(-rectangle.getWidth() / 2 - 3
+							/ viewport.getScale()),
+					(int) Math.round(rectangle.getHeight() / 2 - 3
+							/ viewport.getScale()),
+					(int) Math.round(6 / viewport.getScale()),
+					(int) Math.round(6 / viewport.getScale()));
 
 			// Lower right
 
 			g2d.setColor(Color.WHITE);
 
-			g2d.fillOval((int) Math.round(rectangle.getWidth() / 2) - 3,
-					(int) Math.round(rectangle.getHeight() / 2 - 3), 6, 6);
+			g2d.fillOval(
+					(int) Math.round(rectangle.getWidth() / 2 - 3
+							/ viewport.getScale()),
+					(int) Math.round(rectangle.getHeight() / 2 - 3
+							/ viewport.getScale()),
+					(int) Math.round(6 / viewport.getScale()),
+					(int) Math.round(6 / viewport.getScale()));
 
 			g2d.setColor(Color.BLACK);
 
-			g2d.drawOval((int) Math.round(rectangle.getWidth() / 2) - 3,
-					(int) Math.round(rectangle.getHeight() / 2 - 3), 6, 6);
+			g2d.drawOval(
+					(int) Math.round(rectangle.getWidth() / 2 - 3
+							/ viewport.getScale()),
+					(int) Math.round(rectangle.getHeight() / 2 - 3
+							/ viewport.getScale()),
+					(int) Math.round(6 / viewport.getScale()),
+					(int) Math.round(6 / viewport.getScale()));
 
 			// Rotation
 
 			g2d.setColor(Color.GREEN);
 
-			g2d.fillOval(-3,
-					(int) Math.round(-rectangle.getHeight() * 3 / 4 - 3), 6, 6);
+			g2d.fillOval(
+					-3,
+					(int) Math.round(-rectangle.getHeight() * 3 / 4 - 3
+							/ viewport.getScale()),
+					(int) Math.round(6 / viewport.getScale()),
+					(int) Math.round(6 / viewport.getScale()));
 
 			g2d.setColor(Color.BLACK);
 
@@ -278,49 +344,89 @@ public class MyViewRefresher implements ViewRefresher {
 
 			g2d.setColor(Color.WHITE);
 
-			g2d.fillOval((int) Math.round(-circle.getRadius()) - 3,
-					(int) Math.round(-circle.getRadius() - 3), 6, 6);
+			g2d.fillOval(
+					(int) Math.round(-circle.getRadius() - 3
+							/ viewport.getScale()),
+					(int) Math.round(-circle.getRadius() - 3
+							/ viewport.getScale()),
+					(int) Math.round(6 / viewport.getScale()),
+					(int) Math.round(6 / viewport.getScale()));
 
 			g2d.setColor(Color.BLACK);
 
-			g2d.drawOval((int) Math.round(-circle.getRadius()) - 3,
-					(int) Math.round(-circle.getRadius() - 3), 6, 6);
+			g2d.drawOval(
+					(int) Math.round(-circle.getRadius() - 3
+							/ viewport.getScale()),
+					(int) Math.round(-circle.getRadius() - 3
+							/ viewport.getScale()),
+					(int) Math.round(6 / viewport.getScale()),
+					(int) Math.round(6 / viewport.getScale()));
 
 			// Upper right
 
 			g2d.setColor(Color.WHITE);
 
-			g2d.fillOval((int) Math.round(circle.getRadius()) - 3,
-					(int) Math.round(-circle.getRadius() - 3), 6, 6);
+			g2d.fillOval(
+					(int) Math.round(circle.getRadius() - 3
+							/ viewport.getScale()),
+					(int) Math.round(-circle.getRadius() - 3
+							/ viewport.getScale()),
+					(int) Math.round(6 / viewport.getScale()),
+					(int) Math.round(6 / viewport.getScale()));
 
 			g2d.setColor(Color.BLACK);
 
-			g2d.drawOval((int) Math.round(circle.getRadius()) - 3,
-					(int) Math.round(-circle.getRadius() - 3), 6, 6);
+			g2d.drawOval(
+					(int) Math.round(circle.getRadius() - 3
+							/ viewport.getScale()),
+					(int) Math.round(-circle.getRadius() - 3
+							/ viewport.getScale()),
+					(int) Math.round(6 / viewport.getScale()),
+					(int) Math.round(6 / viewport.getScale()));
 
 			// Lower left
 
 			g2d.setColor(Color.WHITE);
 
-			g2d.fillOval((int) Math.round(-circle.getRadius()) - 3,
-					(int) Math.round(circle.getRadius() - 3), 6, 6);
+			g2d.fillOval(
+					(int) Math.round(-circle.getRadius() - 3
+							/ viewport.getScale()),
+					(int) Math.round(circle.getRadius() - 3
+							/ viewport.getScale()),
+					(int) Math.round(6 / viewport.getScale()),
+					(int) Math.round(6 / viewport.getScale()));
 
 			g2d.setColor(Color.BLACK);
 
-			g2d.drawOval((int) Math.round(-circle.getRadius()) - 3,
-					(int) Math.round(circle.getRadius() - 3), 6, 6);
+			g2d.drawOval(
+					(int) Math.round(-circle.getRadius() - 3
+							/ viewport.getScale()),
+					(int) Math.round(circle.getRadius() - 3
+							/ viewport.getScale()),
+					(int) Math.round(6 / viewport.getScale()),
+					(int) Math.round(6 / viewport.getScale()));
 
 			// Lower right
 
 			g2d.setColor(Color.WHITE);
 
-			g2d.fillOval((int) Math.round(circle.getRadius()) - 3,
-					(int) Math.round(circle.getRadius() - 3), 6, 6);
+			g2d.fillOval(
+					(int) Math.round(circle.getRadius() - 3
+							/ viewport.getScale()),
+					(int) Math.round(circle.getRadius() - 3
+							/ viewport.getScale()),
+					(int) Math.round(6 / viewport.getScale()),
+					(int) Math.round(6 / viewport.getScale()));
 
 			g2d.setColor(Color.BLACK);
 
-			g2d.drawOval((int) Math.round(circle.getRadius()) - 3,
-					(int) Math.round(circle.getRadius() - 3), 6, 6);
+			g2d.drawOval(
+					(int) Math.round(circle.getRadius() - 3
+							/ viewport.getScale()),
+					(int) Math.round(circle.getRadius() - 3
+							/ viewport.getScale()),
+					(int) Math.round(6 / viewport.getScale()),
+					(int) Math.round(6 / viewport.getScale()));
 
 		} else if (controller.getSelected() instanceof Ellipse) {
 
@@ -335,61 +441,109 @@ public class MyViewRefresher implements ViewRefresher {
 
 			g2d.setColor(Color.WHITE);
 
-			g2d.fillOval((int) Math.round(-ellipse.getWidth() / 2) - 3,
-					(int) Math.round(-ellipse.getHeight() / 2 - 3), 6, 6);
+			g2d.fillOval(
+					(int) Math.round(-ellipse.getWidth() / 2 - 3
+							/ viewport.getScale()),
+					(int) Math.round(-ellipse.getHeight() / 2 - 3
+							/ viewport.getScale()),
+					(int) Math.round(6 / viewport.getScale()),
+					(int) Math.round(6 / viewport.getScale()));
 
 			g2d.setColor(Color.BLACK);
 
-			g2d.drawOval((int) Math.round(-ellipse.getWidth() / 2) - 3,
-					(int) Math.round(-ellipse.getHeight() / 2 - 3), 6, 6);
+			g2d.drawOval(
+					(int) Math.round(-ellipse.getWidth() / 2 - 3
+							/ viewport.getScale()),
+					(int) Math.round(-ellipse.getHeight() / 2 - 3
+							/ viewport.getScale()),
+					(int) Math.round(6 / viewport.getScale()),
+					(int) Math.round(6 / viewport.getScale()));
 
 			// Upper right
 
 			g2d.setColor(Color.WHITE);
 
-			g2d.fillOval((int) Math.round(ellipse.getWidth() / 2) - 3,
-					(int) Math.round(-ellipse.getHeight() / 2 - 3), 6, 6);
+			g2d.fillOval(
+					(int) Math.round(ellipse.getWidth() / 2 - 3
+							/ viewport.getScale()),
+					(int) Math.round(-ellipse.getHeight() / 2 - 3
+							/ viewport.getScale()),
+					(int) Math.round(6 / viewport.getScale()),
+					(int) Math.round(6 / viewport.getScale()));
 
 			g2d.setColor(Color.BLACK);
 
-			g2d.drawOval((int) Math.round(ellipse.getWidth() / 2) - 3,
-					(int) Math.round(-ellipse.getHeight() / 2 - 3), 6, 6);
+			g2d.drawOval(
+					(int) Math.round(ellipse.getWidth() / 2 - 3
+							/ viewport.getScale()),
+					(int) Math.round(-ellipse.getHeight() / 2 - 3
+							/ viewport.getScale()),
+					(int) Math.round(6 / viewport.getScale()),
+					(int) Math.round(6 / viewport.getScale()));
 
 			// Lower left
 
 			g2d.setColor(Color.WHITE);
 
-			g2d.fillOval((int) Math.round(-ellipse.getWidth() / 2) - 3,
-					(int) Math.round(ellipse.getHeight() / 2 - 3), 6, 6);
+			g2d.fillOval(
+					(int) Math.round(-ellipse.getWidth() / 2 - 3
+							/ viewport.getScale()),
+					(int) Math.round(ellipse.getHeight() / 2 - 3
+							/ viewport.getScale()),
+					(int) Math.round(6 / viewport.getScale()),
+					(int) Math.round(6 / viewport.getScale()));
 
 			g2d.setColor(Color.BLACK);
 
-			g2d.drawOval((int) Math.round(-ellipse.getWidth() / 2) - 3,
-					(int) Math.round(ellipse.getHeight() / 2 - 3), 6, 6);
+			g2d.drawOval(
+					(int) Math.round(-ellipse.getWidth() / 2 - 3
+							/ viewport.getScale()),
+					(int) Math.round(ellipse.getHeight() / 2 - 3
+							/ viewport.getScale()),
+					(int) Math.round(6 / viewport.getScale()),
+					(int) Math.round(6 / viewport.getScale()));
 
 			// Lower right
 
 			g2d.setColor(Color.WHITE);
 
-			g2d.fillOval((int) Math.round(ellipse.getWidth() / 2) - 3,
-					(int) Math.round(ellipse.getHeight() / 2 - 3), 6, 6);
+			g2d.fillOval(
+					(int) Math.round(ellipse.getWidth() / 2 - 3
+							/ viewport.getScale()),
+					(int) Math.round(ellipse.getHeight() / 2 - 3
+							/ viewport.getScale()),
+					(int) Math.round(6 / viewport.getScale()),
+					(int) Math.round(6 / viewport.getScale()));
 
 			g2d.setColor(Color.BLACK);
 
-			g2d.drawOval((int) Math.round(ellipse.getWidth() / 2) - 3,
-					(int) Math.round(ellipse.getHeight() / 2 - 3), 6, 6);
+			g2d.drawOval(
+					(int) Math.round(ellipse.getWidth() / 2 - 3
+							/ viewport.getScale()),
+					(int) Math.round(ellipse.getHeight() / 2 - 3
+							/ viewport.getScale()),
+					(int) Math.round(6 / viewport.getScale()),
+					(int) Math.round(6 / viewport.getScale()));
 
 			// Rotation
 
 			g2d.setColor(Color.GREEN);
 
-			g2d.fillOval(-3,
-					(int) Math.round(-ellipse.getHeight() * 3 / 4 - 3), 6, 6);
+			g2d.fillOval(
+					(int) Math.round(-3 / viewport.getScale()),
+					(int) Math.round(-ellipse.getHeight() * 3 / 4 - 3
+							/ viewport.getScale()),
+					(int) Math.round(6 / viewport.getScale()),
+					(int) Math.round(6 / viewport.getScale()));
 
 			g2d.setColor(Color.BLACK);
 
-			g2d.drawOval(-3,
-					(int) Math.round(-ellipse.getHeight() * 3 / 4 - 3), 6, 6);
+			g2d.drawOval(
+					(int) Math.round(-3 / viewport.getScale()),
+					(int) Math.round(-ellipse.getHeight() * 3 / 4 - 3
+							/ viewport.getScale()),
+					(int) Math.round(6 / viewport.getScale()),
+					(int) Math.round(6 / viewport.getScale()));
 
 		} else if (controller.getSelected() instanceof Triangle) {
 
@@ -407,51 +561,63 @@ public class MyViewRefresher implements ViewRefresher {
 
 			g2d.setColor(Color.WHITE);
 
-			g2d.fillOval((int) Math.round(triangle.getX1()) - 3,
-					(int) Math.round(triangle.getY1() - 3), 6, 6);
+			g2d.fillOval((int) Math.round(triangle.getX1() - 3
+					/ viewport.getScale()), (int) Math.round(triangle.getY1()
+					- 3 / viewport.getScale()), (int)Math.round(6/viewport.getScale()), (int)Math.round(6/viewport.getScale()));
 
 			g2d.setColor(Color.BLACK);
 
-			g2d.drawOval((int) Math.round(triangle.getX1()) - 3,
-					(int) Math.round(triangle.getY1()) - 3, 6, 6);
+			g2d.drawOval((int) Math.round(triangle.getX1() - 3
+					/ viewport.getScale()), (int) Math.round(triangle.getY1()
+					- 3 / viewport.getScale()), (int)Math.round(6/viewport.getScale()), (int)Math.round(6/viewport.getScale()));
 
 			// Corner 2
 
 			g2d.setColor(Color.WHITE);
 
-			g2d.fillOval((int) Math.round(triangle.getX2()) - 3,
-					(int) Math.round(triangle.getY2() - 3), 6, 6);
+			g2d.fillOval((int) Math.round(triangle.getX2() - 3
+					/ viewport.getScale()), (int) Math.round(triangle.getY2()
+					- 3 / viewport.getScale()), (int)Math.round(6/viewport.getScale()), (int)Math.round(6/viewport.getScale()));
 
 			g2d.setColor(Color.BLACK);
 
-			g2d.drawOval((int) Math.round(triangle.getX2()) - 3,
-					(int) Math.round(triangle.getY2()) - 3, 6, 6);
+			g2d.drawOval((int) Math.round(triangle.getX2() - 3
+					/ viewport.getScale()), (int) Math.round(triangle.getY2()
+					- 3 / viewport.getScale()), (int)Math.round(6/viewport.getScale()), (int)Math.round(6/viewport.getScale()));
 
 			// Corner 3
 
 			g2d.setColor(Color.WHITE);
 
-			g2d.fillOval((int) Math.round(triangle.getX3()) - 3,
-					(int) Math.round(triangle.getY3() - 3), 6, 6);
+			g2d.fillOval((int) Math.round(triangle.getX3() - 3
+					/ viewport.getScale()), (int) Math.round(triangle.getY3()
+					- 3 / viewport.getScale()), (int)Math.round(6/viewport.getScale()), (int)Math.round(6/viewport.getScale()));
 
 			g2d.setColor(Color.BLACK);
 
-			g2d.drawOval((int) Math.round(triangle.getX3()) - 3,
-					(int) Math.round(triangle.getY3()) - 3, 6, 6);
+			g2d.drawOval((int) Math.round(triangle.getX3() - 3
+					/ viewport.getScale()), (int) Math.round(triangle.getY3()
+					- 3 / viewport.getScale()), (int)Math.round(6/viewport.getScale()), (int)Math.round(6/viewport.getScale()));
 
 			// Rotation
 
 			g2d.setColor(Color.GREEN);
 
-			g2d.fillOval(-3, (int) Math.round(Math.min(triangle.getY1(),
-					Math.min(triangle.getY2(), triangle.getY3())) * 3 / 2 - 3),
-					6, 6);
+			g2d.fillOval(
+					(int) Math.round(-3 / viewport.getScale()),
+					(int) Math.round(Math.min(triangle.getY1(),
+							Math.min(triangle.getY2(), triangle.getY3()))
+							* 3 / 2 - 3 / viewport.getScale()), (int)Math.round(6/viewport.getScale()), (int)Math.round(6/viewport.getScale()));
 
 			g2d.setColor(Color.BLACK);
 
-			g2d.drawOval(-3, (int) Math.round(Math.min(triangle.getY1(),
-					Math.min(triangle.getY2(), triangle.getY3())) * 3 / 2 - 3),
-					6, 6);
+			g2d.drawOval(
+					(int) Math.round(-3 / viewport.getScale()),
+					(int) Math.round(Math.min(triangle.getY1(),
+							Math.min(triangle.getY2(), triangle.getY3()))
+							* 3 / 2 - 3 / viewport.getScale()),
+					(int) Math.round(6 / viewport.getScale()),
+					(int) Math.round(6 / viewport.getScale()));
 
 		}
 
@@ -469,8 +635,18 @@ public class MyViewRefresher implements ViewRefresher {
 
 			if (s instanceof Line) {
 
+				AffineTransform original = g2d.getTransform();
+
+				AffineTransform transform = new AffineTransform();
+
+				transform.concatenate(viewport.getWorldToView());
+
+				g2d.setTransform(transform);
+
 				Line line = (Line) s;
 				drawLine(g2d, line);
+				g2d.setTransform(original);
+
 				continue;
 			}
 

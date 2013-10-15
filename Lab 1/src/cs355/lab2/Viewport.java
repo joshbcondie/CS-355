@@ -1,11 +1,11 @@
 package cs355.lab2;
 
 import java.awt.geom.AffineTransform;
-import java.awt.geom.Point2D;
-
-import cs355.GUIFunctions;
 
 public class Viewport {
+
+	private final double WIDTH = 512;
+	private final double HEIGHT = 512;
 
 	private double x;
 	private double y;
@@ -36,16 +36,16 @@ public class Viewport {
 	public void zoomIn() {
 		if (scale <= 2) {
 			scale *= 2;
-			x += 512 / (2 * scale);
-			y += 512 / (2 * scale);
+			x += WIDTH / (2 * scale);
+			y += HEIGHT / (2 * scale);
 		}
 	}
 
 	public void zoomOut() {
 		if (scale >= 0.5) {
 			scale /= 2;
-			x -= 512 / (4 * scale);
-			y -= 512 / (4 * scale);
+			x -= WIDTH / (4 * scale);
+			y -= HEIGHT / (4 * scale);
 		}
 	}
 
