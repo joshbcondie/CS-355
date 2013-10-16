@@ -6,8 +6,8 @@ import cs355.GUIFunctions;
 
 public class Viewport {
 
-	private final double WIDTH = 512;
-	private final double HEIGHT = 512;
+	private final double WIDTH = 2048;
+	private final double HEIGHT = 2048;
 
 	private double x;
 	private double y;
@@ -40,22 +40,26 @@ public class Viewport {
 			scale *= 2;
 			GUIFunctions.setHScrollBarKnob((int) (WIDTH / (4 * scale)));
 			GUIFunctions.setVScrollBarKnob((int) (HEIGHT / (4 * scale)));
-			System.out.println(x + WIDTH / (8 * scale));
 			GUIFunctions.setHScrollBarPosit((int) (x + WIDTH / (8 * scale)));
 			GUIFunctions.setVScrollBarPosit((int) (y + HEIGHT / (8 * scale)));
-			System.out.println(x + " " + y);
 		}
 	}
 
 	public void zoomOut() {
 		if (scale >= 0.5) {
 			scale /= 2;
-			GUIFunctions.setHScrollBarKnob(Math.min((int) (WIDTH - 1),
-					(int) (WIDTH / (4 * scale))));
-			GUIFunctions.setVScrollBarKnob(Math.min((int) (WIDTH - 1),
-					(int) (HEIGHT / (4 * scale))));
-			GUIFunctions.setHScrollBarPosit((int) (x - WIDTH / (2 * scale)));
-			GUIFunctions.setVScrollBarPosit((int) (y - HEIGHT / (2 * scale)));
+			double tempX = x;
+			double tempY = y;
+			if (scale <= 0.3) {
+				GUIFunctions.setHScrollBarPosit(0);
+				GUIFunctions.setVScrollBarPosit(0);
+			}
+			GUIFunctions.setHScrollBarKnob((int) (WIDTH / (4 * scale)));
+			GUIFunctions.setVScrollBarKnob((int) (HEIGHT / (4 * scale)));
+			GUIFunctions
+					.setHScrollBarPosit((int) (tempX - WIDTH / (16 * scale)));
+			GUIFunctions.setVScrollBarPosit((int) (tempY - HEIGHT
+					/ (16 * scale)));
 		}
 	}
 
