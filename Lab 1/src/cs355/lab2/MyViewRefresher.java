@@ -760,6 +760,8 @@ public class MyViewRefresher implements ViewRefresher {
 		drawSelectedOutline(g2d);
 
 		if (controller.getDisplay3D()) {
+			g2d.setStroke(new BasicStroke((float) (1 / viewport.getScale())));
+			g2d.setTransform(viewport.getWorldToView());
 			render3D.draw(g2d);
 		}
 	}
