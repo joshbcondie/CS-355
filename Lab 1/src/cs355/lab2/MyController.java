@@ -1,6 +1,7 @@
 package cs355.lab2;
 
 import java.awt.Color;
+import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.geom.Point2D;
@@ -8,6 +9,7 @@ import java.util.Iterator;
 
 import cs355.CS355Controller;
 import cs355.GUIFunctions;
+import cs355.lab5.Camera;
 
 public class MyController extends MouseAdapter implements CS355Controller {
 
@@ -31,6 +33,7 @@ public class MyController extends MouseAdapter implements CS355Controller {
 	private boolean notLeftButton;
 	private Viewport viewport;
 	private boolean display3D;
+	private Camera camera;
 
 	public MyController(MyModel model) {
 		this.model = model;
@@ -45,6 +48,7 @@ public class MyController extends MouseAdapter implements CS355Controller {
 		notLeftButton = true;
 		setViewport(new Viewport());
 		display3D = false;
+		camera = new Camera();
 	}
 
 	@Override
@@ -384,15 +388,64 @@ public class MyController extends MouseAdapter implements CS355Controller {
 		return display3D;
 	}
 
+	public Camera getCamera() {
+		return camera;
+	}
+
 	@Override
 	public void toggle3DModelDisplay() {
 		display3D = !display3D;
+		GUIFunctions.refresh();
 	}
 
 	@Override
 	public void keyPressed(Iterator<Integer> iterator) {
-		// TODO Auto-generated method stub
 
+		if (!display3D)
+			return;
+
+		while (iterator.hasNext()) {
+
+			int key = iterator.next();
+
+			if (key == KeyEvent.VK_A) {
+				camera.moveLeft();
+			}
+
+			if (key == KeyEvent.VK_D) {
+				camera.moveRight();
+			}
+
+			if (key == KeyEvent.VK_W) {
+				camera.moveForward();
+			}
+
+			if (key == KeyEvent.VK_S) {
+				camera.moveBackward();
+			}
+
+			if (key == KeyEvent.VK_Q) {
+				camera.turnLeft();
+			}
+
+			if (key == KeyEvent.VK_E) {
+				camera.turnRight();
+			}
+
+			if (key == KeyEvent.VK_R) {
+				camera.moveUp();
+			}
+
+			if (key == KeyEvent.VK_F) {
+				camera.moveDown();
+			}
+
+			if (key == KeyEvent.VK_H) {
+				camera.reset();
+			}
+		}
+
+		GUIFunctions.refresh();
 	}
 
 }

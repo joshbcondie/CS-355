@@ -7,17 +7,20 @@ import java.awt.geom.AffineTransform;
 import java.util.List;
 
 import cs355.ViewRefresher;
+import cs355.lab5.Render3D;
 
 public class MyViewRefresher implements ViewRefresher {
 
-	MyModel model;
-	MyController controller;
-	Viewport viewport;
+	private MyModel model;
+	private MyController controller;
+	private Viewport viewport;
+	private Render3D render3D;
 
 	public MyViewRefresher(MyModel model, MyController controller) {
 		this.model = model;
 		this.controller = controller;
 		viewport = controller.getViewport();
+		render3D = new Render3D(controller.getCamera());
 	}
 
 	private void drawLine(Graphics2D g2d, Line line) {
@@ -755,5 +758,9 @@ public class MyViewRefresher implements ViewRefresher {
 		}
 
 		drawSelectedOutline(g2d);
+
+		if (controller.getDisplay3D()) {
+			render3D.draw(g2d);
+		}
 	}
 }

@@ -14,6 +14,13 @@ public class Camera {
 		rotation = 0;
 	}
 
+	public void reset() {
+		x = 0;
+		y = 0;
+		z = 30;
+		rotation = 0;
+	}
+
 	public float getX() {
 		return x;
 	}
