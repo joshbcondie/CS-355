@@ -1,5 +1,6 @@
 package cs355.lab5;
 
+import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.geom.Line2D;
 import java.awt.geom.Line2D.Double;
@@ -20,7 +21,7 @@ public class Render3D {
 		this.camera = camera;
 		house = new HouseModel();
 		zoomX = 1 / Math.tan(35 * Math.PI / 180);
-		zoomY = zoomX * 4 / 3;
+		zoomY = zoomX * 3 / 4;
 		near = 0;
 		far = 500;
 	}
@@ -83,9 +84,7 @@ public class Render3D {
 		double[][] combined = multiply(rotation, translation);
 
 		double[][] start = multiply(combined, point3DToHomogenous(line.start));
-		System.out.println("Original: "
-				+ Arrays.deepToString(point3DToHomogenous(line.start)));
-		System.out.println("Camera: " + Arrays.deepToString(start));
+
 		double[][] end = multiply(combined, point3DToHomogenous(line.end));
 
 		return new Line3D(new Point3D(start[0][0], start[1][0], start[2][0]),
@@ -103,14 +102,10 @@ public class Render3D {
 		clip[3][3] = 1;
 
 		double[][] start = multiply(clip, point3DToHomogenous(line.start));
-		System.out.println("Camera: "
-				+ Arrays.deepToString(point3DToHomogenous(line.start)));
-		System.out.println("Clip: " + Arrays.deepToString(start));
+
 		double[][] end = multiply(clip, point3DToHomogenous(line.end));
 
 		return new double[][][] { start, end };
-		// return new Line3D(new Point3D(start[0][0], start[1][0], start[2][0]),
-		// new Point3D(end[0][0], end[1][0], end[2][0]));
 	}
 
 	private Line2D clipToCanonical(double[][][] line) {
@@ -124,14 +119,12 @@ public class Render3D {
 
 	private Line2D canonicalToScreen(Line2D line) {
 
-		System.out.println("Canonical: " + line.getX1() + " " + line.getY1());
-
 		double[][] translate = new double[3][3];
 		translate[0][0] = 1;
-		translate[1][1] = 1;
+		translate[1][1] = -1;
 		translate[2][2] = 1;
 		translate[0][2] = 1;
-		translate[1][1] = 1;
+		translate[1][2] = 1;
 
 		double[][] scale = new double[3][3];
 		scale[0][0] = 256;
@@ -143,8 +136,6 @@ public class Render3D {
 		double[][] start = multiply(combined, new double[][] {
 				{ line.getX1() }, { line.getY1() }, { 1 } });
 
-		System.out.println("Screen: " + Arrays.deepToString(start));
-
 		double[][] end = multiply(combined, new double[][] { { line.getX2() },
 				{ line.getY2() }, { 1 } });
 
@@ -154,23 +145,25 @@ public class Render3D {
 
 	private boolean isInFrustum(double[][][] line) {
 
-//		if (line[0][0][0] < -line[0][3][0] && line[1][0][0] < -line[1][3][0])
-//			return false;
-//		if (line[0][0][0] > line[0][3][0] && line[1][0][0] > line[1][3][0])
-//			return false;
-//		if (line[0][1][0] < -line[0][3][0] && line[1][1][0] < -line[1][3][0])
-//			return false;
-//		if (line[0][1][0] > line[0][3][0] && line[1][1][0] > line[1][3][0])
-//			return false;
-//		if (line[0][2][0] < -line[0][3][0] && line[1][2][0] < -line[1][3][0])
-//			return false;
-//		if (line[0][2][0] > line[0][3][0] && line[1][2][0] > line[1][3][0])
-//			return false;
+		// if (line[0][0][0] < -line[0][3][0] && line[1][0][0] < -line[1][3][0])
+		// return false;
+		// if (line[0][0][0] > line[0][3][0] && line[1][0][0] > line[1][3][0])
+		// return false;
+		// if (line[0][1][0] < -line[0][3][0] && line[1][1][0] < -line[1][3][0])
+		// return false;
+		// if (line[0][1][0] > line[0][3][0] && line[1][1][0] > line[1][3][0])
+		// return false;
+		// if (line[0][2][0] < -line[0][3][0] && line[1][2][0] < -line[1][3][0])
+		// return false;
+		// if (line[0][2][0] > line[0][3][0] && line[1][2][0] > line[1][3][0])
+		// return false;
 
 		return true;
 	}
 
 	public void draw(Graphics2D g2d) {
+
+		g2d.setColor(Color.PINK);
 
 		for (Line3D line3D : house.lines) {
 			double[][][] clipLine = cameraToClip(objectToCamera(line3D));
