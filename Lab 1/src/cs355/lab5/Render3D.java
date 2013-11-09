@@ -111,10 +111,10 @@ public class Render3D {
 	private Line2D clipToCanonical(double[][][] line) {
 
 		return new Line2D.Double(new Point2D.Double(line[0][0][0]
-				/ line[0][3][0] / line[0][2][0], line[0][1][0] / line[0][3][0]
-				/ line[0][2][0]), new Point2D.Double(line[1][0][0]
-				/ line[1][3][0] / line[1][2][0], line[1][1][0] / line[1][3][0]
-				/ line[1][2][0]));
+				/ line[0][3][0] / Math.abs(line[0][2][0]), line[0][1][0]
+				/ line[0][3][0] / Math.abs(line[0][2][0])), new Point2D.Double(
+				line[1][0][0] / line[1][3][0] / Math.abs(line[1][2][0]),
+				line[1][1][0] / line[1][3][0] / Math.abs(line[1][2][0])));
 	}
 
 	private Line2D canonicalToScreen(Line2D line) {
@@ -145,18 +145,27 @@ public class Render3D {
 
 	private boolean isInFrustum(double[][][] line) {
 
-		// if (line[0][0][0] < -line[0][3][0] && line[1][0][0] < -line[1][3][0])
+		// if (line[0][0][0] / line[0][2][0] < -line[0][3][0]
+		// && line[1][0][0] / line[1][2][0] < -line[1][3][0])
 		// return false;
-		// if (line[0][0][0] > line[0][3][0] && line[1][0][0] > line[1][3][0])
+		// if (line[0][0][0] / line[0][2][0] > line[0][3][0]
+		// && line[1][0][0] / line[1][2][0] > line[1][3][0])
 		// return false;
-		// if (line[0][1][0] < -line[0][3][0] && line[1][1][0] < -line[1][3][0])
+		// if (line[0][1][0] / line[0][2][0] < -line[0][3][0]
+		// && line[1][1][0] / line[1][2][0] < -line[1][3][0])
 		// return false;
-		// if (line[0][1][0] > line[0][3][0] && line[1][1][0] > line[1][3][0])
+		// if (line[0][1][0] / line[0][2][0] > line[0][3][0]
+		// && line[1][1][0] / line[1][2][0] > line[1][3][0])
 		// return false;
-		// if (line[0][2][0] < -line[0][3][0] && line[1][2][0] < -line[1][3][0])
+		// if (line[0][2][0] / line[0][2][0] < -line[0][3][0]
+		// && line[1][2][0] / line[1][2][0] < -line[1][3][0])
 		// return false;
-		// if (line[0][2][0] > line[0][3][0] && line[1][2][0] > line[1][3][0])
+		// if (line[0][2][0] / line[0][2][0] > line[0][3][0]
+		// && line[1][2][0] / line[1][2][0] > line[1][3][0])
 		// return false;
+
+		if (line[0][2][0] <= 0 || line[1][2][0] <= 0)
+			return false;
 
 		return true;
 	}
