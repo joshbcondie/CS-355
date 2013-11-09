@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.geom.Point2D;
+import java.util.Iterator;
 
 import cs355.CS355Controller;
 import cs355.GUIFunctions;
@@ -29,6 +30,7 @@ public class MyController extends MouseAdapter implements CS355Controller {
 	private ShapeUpdater updater;
 	private boolean notLeftButton;
 	private Viewport viewport;
+	private boolean display3D;
 
 	public MyController(MyModel model) {
 		this.model = model;
@@ -42,6 +44,7 @@ public class MyController extends MouseAdapter implements CS355Controller {
 		updater = new ShapeUpdater();
 		notLeftButton = true;
 		setViewport(new Viewport());
+		display3D = false;
 	}
 
 	@Override
@@ -375,6 +378,21 @@ public class MyController extends MouseAdapter implements CS355Controller {
 
 	public void setViewport(Viewport viewport) {
 		this.viewport = viewport;
+	}
+
+	public boolean getDisplay3D() {
+		return display3D;
+	}
+
+	@Override
+	public void toggle3DModelDisplay() {
+		display3D = !display3D;
+	}
+
+	@Override
+	public void keyPressed(Iterator<Integer> iterator) {
+		// TODO Auto-generated method stub
+
 	}
 
 }
