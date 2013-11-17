@@ -3,10 +3,7 @@ package cs355.lab5;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.geom.Line2D;
-import java.awt.geom.Line2D.Double;
 import java.awt.geom.Point2D;
-import java.util.Arrays;
-import java.util.List;
 
 public class Render3D {
 
@@ -16,14 +13,38 @@ public class Render3D {
 	private double zoomY;
 	private double near;
 	private double far;
+	private double[][] clip;
+	private double[][] combined;
 
 	public Render3D(Camera camera) {
 		this.camera = camera;
 		house = new HouseModel();
 		zoomX = 1 / Math.tan(35 * Math.PI / 180);
 		zoomY = zoomX * 3 / 4;
-		near = 0;
+		near = 1;
 		far = 500;
+		
+		clip = new double[4][4];
+
+		clip[0][0] = zoomX;
+		clip[1][1] = zoomY;
+		clip[2][2] = (far + near) / (far - near);
+		clip[2][3] = (2 * near * far) / (far - near);
+		clip[3][2] = 1;
+		
+		double[][] translate = new double[3][3];
+		translate[0][0] = 1;
+		translate[1][1] = -1;
+		translate[2][2] = 1;
+		translate[0][2] = 1;
+		translate[1][2] = 1;
+
+		double[][] scale = new double[3][3];
+		scale[0][0] = 1024;
+		scale[1][1] = 1024;
+		scale[2][2] = 1;
+
+		combined = multiply(scale, translate);
 	}
 
 	private static double[][] multiply(double[][] A, double[][] B) {
@@ -93,14 +114,6 @@ public class Render3D {
 
 	private double[][][] cameraToClip(Line3D line) {
 
-		double[][] clip = new double[4][4];
-
-		clip[0][0] = zoomX;
-		clip[1][1] = zoomY;
-		clip[2][2] = (far + near) / (far - near);
-		clip[3][2] = (2 * near * far) / (far - near);
-		clip[3][3] = 1;
-
 		double[][] start = multiply(clip, point3DToHomogenous(line.start));
 
 		double[][] end = multiply(clip, point3DToHomogenous(line.end));
@@ -111,27 +124,13 @@ public class Render3D {
 	private Line2D clipToCanonical(double[][][] line) {
 
 		return new Line2D.Double(new Point2D.Double(line[0][0][0]
-				/ line[0][3][0] / Math.abs(line[0][2][0]), line[0][1][0]
-				/ line[0][3][0] / Math.abs(line[0][2][0])), new Point2D.Double(
-				line[1][0][0] / line[1][3][0] / Math.abs(line[1][2][0]),
-				line[1][1][0] / line[1][3][0] / Math.abs(line[1][2][0])));
+				/ Math.abs(line[0][3][0]), line[0][1][0]
+				/ Math.abs(line[0][3][0])), new Point2D.Double(line[1][0][0]
+				/ Math.abs(line[1][3][0]), line[1][1][0]
+				/ Math.abs(line[1][3][0])));
 	}
 
 	private Line2D canonicalToScreen(Line2D line) {
-
-		double[][] translate = new double[3][3];
-		translate[0][0] = 1;
-		translate[1][1] = -1;
-		translate[2][2] = 1;
-		translate[0][2] = 1;
-		translate[1][2] = 1;
-
-		double[][] scale = new double[3][3];
-		scale[0][0] = 256;
-		scale[1][1] = 256;
-		scale[2][2] = 1;
-
-		double[][] combined = multiply(scale, translate);
 
 		double[][] start = multiply(combined, new double[][] {
 				{ line.getX1() }, { line.getY1() }, { 1 } });
@@ -145,27 +144,29 @@ public class Render3D {
 
 	private boolean isInFrustum(double[][][] line) {
 
-		// if (line[0][0][0] / line[0][2][0] < -line[0][3][0]
-		// && line[1][0][0] / line[1][2][0] < -line[1][3][0])
-		// return false;
-		// if (line[0][0][0] / line[0][2][0] > line[0][3][0]
-		// && line[1][0][0] / line[1][2][0] > line[1][3][0])
-		// return false;
-		// if (line[0][1][0] / line[0][2][0] < -line[0][3][0]
-		// && line[1][1][0] / line[1][2][0] < -line[1][3][0])
-		// return false;
-		// if (line[0][1][0] / line[0][2][0] > line[0][3][0]
-		// && line[1][1][0] / line[1][2][0] > line[1][3][0])
-		// return false;
-		// if (line[0][2][0] / line[0][2][0] < -line[0][3][0]
-		// && line[1][2][0] / line[1][2][0] < -line[1][3][0])
-		// return false;
-		// if (line[0][2][0] / line[0][2][0] > line[0][3][0]
-		// && line[1][2][0] / line[1][2][0] > line[1][3][0])
-		// return false;
-
-		if (line[0][2][0] <= 0 || line[1][2][0] <= 0)
+		if (line[0][3][0] == 0 || line[1][3][0] == 0) {
 			return false;
+		}
+
+		if (line[0][0][0] < -line[0][3][0] && line[1][0][0] < -line[1][3][0]) {
+			return false;
+		}
+		if (line[0][0][0] > line[0][3][0] && line[1][0][0] > line[1][3][0]) {
+			return false;
+		}
+		if (line[0][1][0] < -line[0][3][0] && line[1][1][0] < -line[1][3][0]) {
+			return false;
+		}
+		if (line[0][1][0] > line[0][3][0] && line[1][1][0] > line[1][3][0]) {
+			return false;
+		}
+		if (line[0][2][0] < -line[0][3][0] || line[1][2][0] < -line[1][3][0]) {
+			return false;
+		}
+		if (line[0][2][0] / line[0][2][0] > line[0][3][0]
+				&& line[1][2][0] / line[1][2][0] > line[1][3][0]) {
+			return false;
+		}
 
 		return true;
 	}
