@@ -1,6 +1,9 @@
 package cs355.lab6;
 
 import java.awt.image.BufferedImage;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 public class ImageModel {
 
@@ -8,9 +11,20 @@ public class ImageModel {
 	private int height;
 	private int[][] pixels;
 	private int[][] temp;
+	private int[][] temp2;
 
 	public void doEdgeDetection() {
-		// TODO Auto-generated method stub
+		applyKernelTemp(
+				new int[][] { { -1, -2, -1 }, { 0, 0, 0 }, { 1, 2, 1 } }, 8);
+		applyKernelTemp2(
+				new int[][] { { -1, 0, 1 }, { -2, 0, 2 }, { -1, 0, 1 } }, 8);
+
+		for (int i = 0; i < pixels.length; i++) {
+			for (int j = 0; j < pixels[i].length; j++) {
+				pixels[i][j] = (int) Math.round(Math.sqrt(temp[i][j]
+						* temp[i][j] + temp2[i][j] * temp2[i][j]));
+			}
+		}
 	}
 
 	public void doSharpen() {
@@ -19,7 +33,34 @@ public class ImageModel {
 	}
 
 	public void doMedianBlur() {
-		// TODO Auto-generated method stub
+
+		for (int i = 0; i < pixels.length; i++) {
+			for (int j = 0; j < pixels[i].length; j++) {
+
+				List<Integer> values = new ArrayList<>();
+
+				for (int k = -1; k <= 1; k++) {
+					for (int l = -1; l <= 1; l++) {
+
+						if (i + k < 0 || i + k >= pixels.length)
+							values.add(pixels[i][j]);
+						else if (j + l < 0 || j + l >= pixels[i].length)
+							values.add(pixels[i][j]);
+						else
+							values.add(pixels[i + k][j + l]);
+					}
+				}
+
+				Collections.sort(values);
+				temp[i][j] = values.get(values.size() / 2);
+			}
+		}
+
+		for (int i = 0; i < pixels.length; i++) {
+			for (int j = 0; j < pixels[i].length; j++) {
+				pixels[i][j] = temp[i][j];
+			}
+		}
 	}
 
 	public void doUniformBlur() {
@@ -67,6 +108,7 @@ public class ImageModel {
 		height = openImage.getHeight();
 		pixels = new int[height][width];
 		temp = new int[height][width];
+		temp2 = new int[height][width];
 
 		for (int i = 0; i < openImage.getHeight(); i++) {
 			for (int j = 0; j < openImage.getWidth(); j++) {
@@ -97,12 +139,79 @@ public class ImageModel {
 				}
 
 				temp[i][j] = (int) Math.round(average / dividend);
+
+				if (temp[i][j] < 0)
+					temp[i][j] = 0;
+				else if (temp[i][j] > 255)
+					temp[i][j] = 255;
 			}
 		}
 
 		for (int i = 0; i < pixels.length; i++) {
 			for (int j = 0; j < pixels[i].length; j++) {
 				pixels[i][j] = temp[i][j];
+			}
+		}
+	}
+
+	public void applyKernelTemp(int[][] kernel, double dividend) {
+
+		for (int i = 0; i < pixels.length; i++) {
+			for (int j = 0; j < pixels[i].length; j++) {
+
+				int average = 0;
+
+				for (int k = -kernel.length / 2; k <= kernel.length / 2; k++) {
+					for (int l = -kernel[0].length / 2; l <= kernel[0].length / 2; l++) {
+
+						if (i + k < 0 || i + k >= pixels.length)
+							continue;
+						if (j + l < 0 || j + l >= pixels[i].length)
+							continue;
+
+						average += pixels[i + k][j + l]
+								* kernel[k + kernel.length / 2][l
+										+ kernel[0].length / 2];
+					}
+				}
+
+				temp[i][j] = (int) Math.round(average / dividend);
+
+				if (temp[i][j] < 0)
+					temp[i][j] = 0;
+				else if (temp[i][j] > 255)
+					temp[i][j] = 255;
+			}
+		}
+	}
+
+	public void applyKernelTemp2(int[][] kernel, double dividend) {
+
+		for (int i = 0; i < pixels.length; i++) {
+			for (int j = 0; j < pixels[i].length; j++) {
+
+				int average = 0;
+
+				for (int k = -kernel.length / 2; k <= kernel.length / 2; k++) {
+					for (int l = -kernel[0].length / 2; l <= kernel[0].length / 2; l++) {
+
+						if (i + k < 0 || i + k >= pixels.length)
+							continue;
+						if (j + l < 0 || j + l >= pixels[i].length)
+							continue;
+
+						average += pixels[i + k][j + l]
+								* kernel[k + kernel.length / 2][l
+										+ kernel[0].length / 2];
+					}
+				}
+
+				temp2[i][j] = (int) Math.round(average / dividend);
+
+				if (temp2[i][j] < 0)
+					temp2[i][j] = 0;
+				else if (temp2[i][j] > 255)
+					temp2[i][j] = 255;
 			}
 		}
 	}

@@ -704,8 +704,8 @@ public class MyViewRefresher implements ViewRefresher {
 				}
 			}
 
-			g2d.drawImage(image, 1024 - image.getWidth(),
-					1024 - image.getHeight(), image.getWidth(),
+			g2d.drawImage(image, 1024 - image.getWidth() / 2,
+					1024 - image.getHeight() / 2, image.getWidth(),
 					image.getHeight(), null);
 
 			g2d.setTransform(original);
