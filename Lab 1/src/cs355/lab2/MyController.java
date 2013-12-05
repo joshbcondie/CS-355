@@ -5,11 +5,13 @@ import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.geom.Point2D;
+import java.awt.image.BufferedImage;
 import java.util.Iterator;
 
 import cs355.CS355Controller;
 import cs355.GUIFunctions;
 import cs355.lab5.Camera;
+import cs355.lab6.ImageModel;
 
 public class MyController extends MouseAdapter implements CS355Controller {
 
@@ -34,6 +36,8 @@ public class MyController extends MouseAdapter implements CS355Controller {
 	private Viewport viewport;
 	private boolean display3D;
 	private Camera camera;
+	private ImageModel imageModel;
+	private boolean displayImage;
 
 	public MyController(MyModel model) {
 		this.model = model;
@@ -49,6 +53,8 @@ public class MyController extends MouseAdapter implements CS355Controller {
 		setViewport(new Viewport());
 		display3D = false;
 		camera = new Camera();
+		imageModel = new ImageModel();
+		displayImage = false;
 	}
 
 	@Override
@@ -446,6 +452,62 @@ public class MyController extends MouseAdapter implements CS355Controller {
 		}
 
 		GUIFunctions.refresh();
+	}
+
+	@Override
+	public void doEdgeDetection() {
+		imageModel.doEdgeDetection();
+		GUIFunctions.refresh();
+	}
+
+	@Override
+	public void doSharpen() {
+		imageModel.doSharpen();
+		GUIFunctions.refresh();
+	}
+
+	@Override
+	public void doMedianBlur() {
+		imageModel.doMedianBlur();
+		GUIFunctions.refresh();
+	}
+
+	@Override
+	public void doUniformBlur() {
+		imageModel.doUniformBlur();
+		GUIFunctions.refresh();
+	}
+
+	@Override
+	public void doChangeContrast(int contrastAmountNum) {
+		imageModel.doChangeContrast(contrastAmountNum);
+		GUIFunctions.refresh();
+	}
+
+	@Override
+	public void doChangeBrightness(int brightnessAmountNum) {
+		imageModel.doChangeBrightness(brightnessAmountNum);
+		GUIFunctions.refresh();
+	}
+
+	@Override
+	public void doLoadImage(BufferedImage openImage) {
+		imageModel.doLoadImage(openImage);
+		GUIFunctions.refresh();
+	}
+
+	public boolean getDisplayImage() {
+		return displayImage;
+	}
+
+	@Override
+	public void toggleBackgroundDisplay() {
+		displayImage = !displayImage;
+		GUIFunctions.refresh();
+	}
+
+	public ImageModel getImageModel() {
+		return imageModel;
 	}
 
 }

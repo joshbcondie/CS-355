@@ -4,10 +4,12 @@ import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.geom.AffineTransform;
+import java.awt.image.BufferedImage;
 import java.util.List;
 
 import cs355.ViewRefresher;
 import cs355.lab5.Render3D;
+import cs355.lab6.ImageModel;
 
 public class MyViewRefresher implements ViewRefresher {
 
@@ -15,12 +17,14 @@ public class MyViewRefresher implements ViewRefresher {
 	private MyController controller;
 	private Viewport viewport;
 	private Render3D render3D;
+	private ImageModel imageModel;
 
 	public MyViewRefresher(MyModel model, MyController controller) {
 		this.model = model;
 		this.controller = controller;
 		viewport = controller.getViewport();
 		render3D = new Render3D(controller.getCamera());
+		imageModel = controller.getImageModel();
 	}
 
 	private void drawLine(Graphics2D g2d, Line line) {
@@ -685,6 +689,27 @@ public class MyViewRefresher implements ViewRefresher {
 
 	@Override
 	public void refreshView(Graphics2D g2d) {
+
+		if (controller.getDisplayImage() && imageModel.getPixels() != null) {
+			AffineTransform original = g2d.getTransform();
+			g2d.setTransform(viewport.getWorldToView());
+
+			BufferedImage image = new BufferedImage(imageModel.getWidth(),
+					imageModel.getHeight(), BufferedImage.TYPE_BYTE_GRAY);
+
+			for (int i = 0; i < image.getHeight(); i++) {
+				for (int j = 0; j < image.getWidth(); j++) {
+					image.getRaster().setPixel(j, i,
+							new int[] { imageModel.getPixels()[i][j] });
+				}
+			}
+
+			g2d.drawImage(image, 1024 - image.getWidth(),
+					1024 - image.getHeight(), image.getWidth(),
+					image.getHeight(), null);
+
+			g2d.setTransform(original);
+		}
 
 		List<Shape> shapes = model.getShapes();
 
